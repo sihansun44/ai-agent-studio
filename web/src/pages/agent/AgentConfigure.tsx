@@ -148,9 +148,9 @@ export default function AgentConfigure() {
         const containerRect = instructionRef.current.getBoundingClientRect();
         
         if (cursorRect.top > 0) {
-          // Position at the end of the current line (right edge of container)
+          // Position at the end of the current line (32px from right edge)
           setPlusButtonPosition({
-            x: containerRect.right - 40,
+            x: containerRect.right - 32,
             y: cursorRect.top - 2
           });
         }

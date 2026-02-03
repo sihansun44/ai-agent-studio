@@ -32,7 +32,7 @@ export default function AgentOverview() {
           <>
             <Card>
               <CardTitle style={{ marginBottom: '16px' }}>Quick Stats (7 days)</CardTitle>
-              <div className="grid grid-2" style={{ gap: '16px' }}>
+              <div className="grid grid-3" style={{ gap: '16px' }}>
                 <div className="stat-card">
                   <div className="stat-label">Total Sessions</div>
                   <div className="stat-value">{agent.sessions}</div>
@@ -43,39 +43,45 @@ export default function AgentOverview() {
                   <div className="stat-value">{agent.successRate}</div>
                   <div className="stat-change positive">↑ 2.1%</div>
                 </div>
+                <div className="stat-card">
+                  <div className="stat-label">Configuration</div>
+                  <div className="stat-value config-summary-compact">
+                    <span>Autonomous</span>
+                  </div>
+                  <div className="stat-meta">3 knowledge bases · 8 capabilities · v2.4.0</div>
+                </div>
               </div>
             </Card>
-            <div className="section-divider"></div>
           </>
         )}
 
-        {/* Configuration Summary */}
-        <Card>
-          <CardTitle style={{ marginBottom: '16px' }}>Configuration Summary</CardTitle>
-          <div className="config-summary-card">
-            <div className="config-summary-row">
-              <span className="config-summary-label">Agent Type</span>
-              <span className="config-summary-value">Autonomous</span>
+        {/* Configuration Summary - only show for non-published agents */}
+        {!isPublished && (
+          <Card>
+            <CardTitle style={{ marginBottom: '16px' }}>Configuration Summary</CardTitle>
+            <div className="config-summary-card">
+              <div className="config-summary-row">
+                <span className="config-summary-label">Agent Type</span>
+                <span className="config-summary-value">Autonomous</span>
+              </div>
+              <div className="config-summary-row">
+                <span className="config-summary-label">Knowledge Bases</span>
+                <span className="config-summary-value">3 connected</span>
+              </div>
+              <div className="config-summary-row">
+                <span className="config-summary-label">Capabilities</span>
+                <span className="config-summary-value">8 enabled</span>
+              </div>
+              <div className="config-summary-row">
+                <span className="config-summary-label">Version</span>
+                <span className="config-summary-value">v2.4.0</span>
+              </div>
             </div>
-            <div className="config-summary-row">
-              <span className="config-summary-label">Knowledge Bases</span>
-              <span className="config-summary-value">3 connected</span>
-            </div>
-            <div className="config-summary-row">
-              <span className="config-summary-label">Capabilities</span>
-              <span className="config-summary-value">8 enabled</span>
-            </div>
-            <div className="config-summary-row">
-              <span className="config-summary-label">Version</span>
-              <span className="config-summary-value">v2.4.0</span>
-            </div>
-          </div>
-        </Card>
-
-        <div className="section-divider"></div>
+          </Card>
+        )}
 
         {/* Deployments */}
-        <Card>
+        <Card style={{ marginTop: '20px' }}>
           <CardTitle style={{ marginBottom: '16px' }}>Deployments</CardTitle>
           <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px' }}>
             Where this agent is embedded (read-only)
@@ -85,7 +91,7 @@ export default function AgentOverview() {
             <div className="deployment-widget">
               <div className="deployment-section">
                 <div className="deployment-section-title">
-                  <span>FlowBuilder Digital</span>
+                  <span>Digital flowbuilder</span>
                   <a href="#" className="deployment-link">View in Connect →</a>
                 </div>
                 <div className="deployment-item">
@@ -98,7 +104,7 @@ export default function AgentOverview() {
               <div className="deployment-divider"></div>
               <div className="deployment-section">
                 <div className="deployment-section-title">
-                  <span>FlowBuilder Voice</span>
+                  <span>Voice flowbuilder</span>
                   <a href="#" className="deployment-link">View in FlowBuilder →</a>
                 </div>
                 <div className="deployment-item">

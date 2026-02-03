@@ -631,6 +631,21 @@ body {
 .stat-change.positive { color: var(--success-color); }
 .stat-change.negative { color: var(--danger-color); }
 
+.stat-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.stat-value.config-summary-compact {
+  font-size: 24px;
+}
+
+.stat-value.config-summary-compact span {
+  font-size: 24px;
+  font-weight: 700;
+}
+
 /* Analytics Charts */
 .analytics-chart {
   display: flex;
@@ -2953,7 +2968,7 @@ a:hover {
 .configure-textarea {
   flex: 1;
   width: 100%;
-  padding: 16px;
+  padding: 16px 32px 16px 24px;
   border: 1px solid var(--border-color);
   border-radius: 12px;
   font-size: 14px;
@@ -3370,9 +3385,9 @@ select.configure-input option {
   height: 28px;
   border-radius: 50%;
   background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-color);
-  font-size: 18px;
+  color: var(--text-muted);
+  border: none;
+  font-size: 20px;
   font-weight: 400;
   cursor: pointer;
   display: flex;
@@ -3383,9 +3398,8 @@ select.configure-input option {
 }
 
 .instruction-plus-btn:hover {
-  background: var(--bg-glass);
+  background: rgba(255, 255, 255, 0.1);
   color: var(--text-primary);
-  border-color: var(--outline-color);
 }
 
 /* Plus Menu Dropdown */
