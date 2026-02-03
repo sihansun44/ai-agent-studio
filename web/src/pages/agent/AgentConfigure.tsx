@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { useApp } from '../../contexts/AppContext';
 import Button from '../../components/shared/Button';
@@ -30,6 +31,82 @@ const CAPABILITIES = [
   { id: 5, name: 'Schedule Callback', type: 'Action', enabled: false },
 ];
 
+// Example instruction templates
+const EXAMPLE_TEMPLATES = [
+  {
+    id: 'customer-support',
+    name: 'Customer Support',
+    description: 'Standard support agent instructions',
+    content: `You are a helpful customer support agent. Your role is to assist customers with their inquiries, troubleshoot issues, and provide accurate information.
+
+## Guidelines:
+- Always be polite, professional, and empathetic
+- If you don't know the answer, offer to connect the customer with a human agent
+- Never make up information about products or policies
+- Keep responses concise but helpful
+
+## Tone:
+Professional yet friendly. Use clear, simple language.`
+  },
+  {
+    id: 'sales-assistant',
+    name: 'Sales Assistant',
+    description: 'Product recommendation focus',
+    content: `You are a knowledgeable sales assistant. Help customers find the perfect products based on their needs and preferences.
+
+## Guidelines:
+- Ask clarifying questions to understand customer needs
+- Provide personalized product recommendations
+- Highlight key features and benefits
+- Be transparent about pricing and availability
+
+## Tone:
+Enthusiastic and helpful without being pushy.`
+  },
+  {
+    id: 'technical-help',
+    name: 'Technical Help',
+    description: 'Troubleshooting focus',
+    content: `You are a technical support specialist. Help users diagnose and resolve technical issues with our products.
+
+## Guidelines:
+- Ask for error messages and system information
+- Provide step-by-step troubleshooting instructions
+- Escalate complex issues to engineering when needed
+- Document solutions for future reference
+
+## Tone:
+Patient, clear, and technically precise.`
+  },
+  {
+    id: 'general-assistant',
+    name: 'General Assistant',
+    description: 'Flexible conversational agent',
+    content: `You are a versatile AI assistant. Help users with a wide range of questions and tasks.
+
+## Guidelines:
+- Adapt your communication style to match the user
+- Provide accurate and helpful information
+- Acknowledge when you're uncertain
+- Offer to help with follow-up questions
+
+## Tone:
+Friendly, approachable, and adaptable.`
+  }
+];
+
+const WELCOME_MESSAGE = `## Welcome Message
+
+👋 Welcome! I'm here to help you today.
+
+Before we begin, could you please tell me:
+- Your name
+- What I can help you with today
+
+---
+
+`;
+
 export default function AgentConfigure() {
   const { agentId } = useParams();
   const navigate = useNavigate();
@@ -42,7 +119,16 @@ export default function AgentConfigure() {
   const [showAdvancedModal, setShowAdvancedModal] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
   const instructionRef = useRef(null);
+  const instructionContainerRef = useRef(null);
   const initialized = useRef(false);
+
+  // Plus menu state
+  const [showPlusButton, setShowPlusButton] = useState(false);
+  const [showPlusMenu, setShowPlusMenu] = useState(false);
+  const [plusButtonPosition, setPlusButtonPosition] = useState({ x: 0, y: 0 });
+  const [showExamplesModal, setShowExamplesModal] = useState(false);
+  const [showCapabilityPicker, setShowCapabilityPicker] = useState(false);
+  const [isOptimizing, setIsOptimizing] = useState(false);
 
   // Set initial content only once
   useEffect(() => {
@@ -51,6 +137,187 @@ export default function AgentConfigure() {
       initialized.current = true;
     }
   }, []);
+
+  // Update plus button position based on cursor - always at end of line
+  const updatePlusButtonPosition = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0 && instructionRef.current) {
+      const range = selection.getRangeAt(0);
+      if (instructionRef.current.contains(range.startContainer)) {
+        const cursorRect = range.getBoundingClientRect();
+        const containerRect = instructionRef.current.getBoundingClientRect();
+        
+        if (cursorRect.top > 0) {
+          // Position at the end of the current line (right edge of container)
+          setPlusButtonPosition({
+            x: containerRect.right - 40,
+            y: cursorRect.top - 2
+          });
+        }
+      }
+    }
+  };
+
+  // Handle focus on instruction field
+  const handleInstructionFocus = () => {
+    setShowPlusButton(true);
+    setTimeout(updatePlusButtonPosition, 10);
+  };
+
+  // Handle blur on instruction field
+  const handleInstructionBlur = (e) => {
+    // Don't hide if clicking on plus button or menu
+    const relatedTarget = e.relatedTarget;
+    if (relatedTarget?.closest('.instruction-plus-btn') || 
+        relatedTarget?.closest('.instruction-plus-menu') ||
+        relatedTarget?.closest('.instruction-capability-picker')) {
+      return;
+    }
+    // Longer delay to allow menu clicks to register
+    setTimeout(() => {
+      if (!showPlusMenu && !showCapabilityPicker) {
+        setShowPlusButton(false);
+      }
+    }, 200);
+  };
+
+  // Close menus when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (showPlusMenu || showCapabilityPicker) {
+        const target = e.target;
+        if (!target.closest('.instruction-plus-menu') && 
+            !target.closest('.instruction-capability-picker') &&
+            !target.closest('.instruction-plus-btn')) {
+          setShowPlusMenu(false);
+          setShowCapabilityPicker(false);
+        }
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showPlusMenu, showCapabilityPicker]);
+
+  // Handle selection change in instruction field
+  const handleSelectionChange = () => {
+    if (showPlusButton) {
+      updatePlusButtonPosition();
+    }
+  };
+
+  // Add welcome message at the beginning
+  const handleAddWelcome = () => {
+    if (instructionRef.current) {
+      const currentContent = instructionRef.current.innerHTML;
+      instructionRef.current.innerHTML = WELCOME_MESSAGE.replace(/\n/g, '<br>') + currentContent;
+      showToast('Welcome message added');
+    }
+    setShowPlusMenu(false);
+  };
+
+  // Open examples modal
+  const handleViewExamples = () => {
+    setShowPlusMenu(false);
+    setShowExamplesModal(true);
+  };
+
+  // Apply example template
+  const handleApplyTemplate = (template) => {
+    if (instructionRef.current) {
+      instructionRef.current.innerHTML = template.content.replace(/\n/g, '<br>');
+      showToast(`Applied "${template.name}" template`);
+    }
+    setShowExamplesModal(false);
+  };
+
+  // Optimize instruction with mock AI
+  const handleOptimizeInstruction = () => {
+    setShowPlusMenu(false);
+    setIsOptimizing(true);
+    
+    // Simulate AI processing
+    setTimeout(() => {
+      if (instructionRef.current) {
+        const currentContent = instructionRef.current.innerText;
+        const optimizedContent = `## Role & Purpose
+You are a professional customer support agent for Acme Corporation, dedicated to providing exceptional service.
+
+## Core Responsibilities
+- Assist customers with inquiries and issues
+- Provide accurate, helpful information
+- Troubleshoot problems efficiently
+
+## Communication Guidelines
+1. **Be Professional**: Maintain a polite, empathetic tone
+2. **Be Honest**: Never fabricate information about products or policies
+3. **Be Helpful**: Offer to connect with human agents when needed
+4. **Be Concise**: Keep responses clear and to the point
+
+## Response Style
+- Use clear, simple language
+- Structure responses for easy reading
+- Acknowledge customer concerns
+- End with next steps or follow-up options`;
+        
+        instructionRef.current.innerHTML = optimizedContent.replace(/\n/g, '<br>');
+        showToast('Instruction optimized with AI');
+      }
+      setIsOptimizing(false);
+    }, 1500);
+  };
+
+  // Show capability picker
+  const handleShowCapabilityPicker = () => {
+    setShowPlusMenu(false);
+    setShowCapabilityPicker(true);
+  };
+
+  // Insert capability at cursor position
+  const insertCapabilityAtCursor = (cap) => {
+    if (!instructionRef.current) return;
+    
+    const colors = {
+      mcp: { bg: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', border: 'rgba(59, 130, 246, 0.3)' },
+      action: { bg: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', border: 'rgba(168, 85, 247, 0.3)' },
+      handoff: { bg: 'rgba(34, 197, 94, 0.2)', color: '#4ade80', border: 'rgba(34, 197, 94, 0.3)' }
+    };
+    const typeColor = colors[cap.type.toLowerCase()] || colors.mcp;
+    
+    const chip = document.createElement('span');
+    chip.setAttribute('contenteditable', 'false');
+    chip.style.cssText = `display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; background: ${typeColor.bg}; color: ${typeColor.color}; border: 1px solid ${typeColor.border}; font-size: 12px; font-weight: 500; margin: 0 2px; vertical-align: middle;`;
+    chip.textContent = `⚡ ${cap.name}`;
+    
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      if (instructionRef.current.contains(range.startContainer)) {
+        range.insertNode(chip);
+        const space = document.createTextNode('\u00A0');
+        if (chip.nextSibling) {
+          chip.parentNode.insertBefore(space, chip.nextSibling);
+        } else {
+          chip.parentNode.appendChild(space);
+        }
+        range.setStartAfter(space);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      } else {
+        instructionRef.current.appendChild(document.createTextNode('\u00A0'));
+        instructionRef.current.appendChild(chip);
+        instructionRef.current.appendChild(document.createTextNode('\u00A0'));
+      }
+    } else {
+      instructionRef.current.appendChild(document.createTextNode('\u00A0'));
+      instructionRef.current.appendChild(chip);
+      instructionRef.current.appendChild(document.createTextNode('\u00A0'));
+    }
+    
+    setShowCapabilityPicker(false);
+    instructionRef.current.focus();
+    showToast(`Added "${cap.name}" capability`);
+  };
   
   // Advanced settings state
   const [responseLength, setResponseLength] = useState('medium');
@@ -202,17 +469,171 @@ export default function AgentConfigure() {
         <div className="configure-main">
           <div className="configure-section">
             <label className="configure-label">Instruction</label>
-            <div 
-              ref={instructionRef}
-              className={`configure-textarea instruction-editor ${isDragOver ? 'drag-over' : ''}`}
-              contentEditable
-              suppressContentEditableWarning
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            />
+            <div className="instruction-editor-container" ref={instructionContainerRef}>
+              {/* Formatting Toolbar */}
+              <div className="instruction-toolbar">
+                <div className="toolbar-left">
+                  <button 
+                    className="toolbar-btn" 
+                    title="Bold (Ctrl+B)"
+                    onMouseDown={(e) => { e.preventDefault(); document.execCommand('bold'); }}
+                  >
+                    <strong>B</strong>
+                  </button>
+                  <button 
+                    className="toolbar-btn" 
+                    title="Italic (Ctrl+I)"
+                    onMouseDown={(e) => { e.preventDefault(); document.execCommand('italic'); }}
+                  >
+                    <em>I</em>
+                  </button>
+                  <button 
+                    className="toolbar-btn" 
+                    title="Underline (Ctrl+U)"
+                    onMouseDown={(e) => { e.preventDefault(); document.execCommand('underline'); }}
+                  >
+                    <span style={{ textDecoration: 'underline' }}>U</span>
+                  </button>
+                  <div className="toolbar-divider" />
+                  <button 
+                    className="toolbar-btn" 
+                    title="Add Link"
+                    onMouseDown={(e) => { 
+                      e.preventDefault(); 
+                      const url = prompt('Enter URL:');
+                      if (url) document.execCommand('createLink', false, url);
+                    }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+                    </svg>
+                  </button>
+                  <div className="toolbar-divider" />
+                  <button 
+                    className="toolbar-btn toolbar-btn-text" 
+                    title="Markdown formatting enabled"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6h17.12c.79 0 1.44.63 1.44 1.41v9.18c0 .78-.65 1.41-1.44 1.41zM6.81 15.19v-3.66l1.92 2.35 1.92-2.35v3.66h1.93V8.81h-1.93l-1.92 2.35-1.92-2.35H4.89v6.38h1.92zM19.69 12h-1.92V8.81h-1.92V12h-1.93l2.89 3.28L19.69 12z"/>
+                    </svg>
+                    <span>Markdown</span>
+                  </button>
+                </div>
+                <div className="toolbar-right">
+                  <button 
+                    className="toolbar-btn toolbar-btn-primary"
+                    onClick={handleOptimizeInstruction}
+                    disabled={isOptimizing}
+                  >
+                    {isOptimizing ? (
+                      <>
+                        <span className="toolbar-spinner" />
+                        Optimizing...
+                      </>
+                    ) : (
+                      <>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29a.996.996 0 00-1.41 0L1.29 18.96a.996.996 0 000 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05a.996.996 0 000-1.41l-2.33-2.35zm-1.03 5.49l-2.12-2.12 2.44-2.44 2.12 2.12-2.44 2.44z"/>
+                        </svg>
+                        Optimize
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+              
+              <div 
+                ref={instructionRef}
+                className={`configure-textarea instruction-editor ${isDragOver ? 'drag-over' : ''}`}
+                contentEditable
+                suppressContentEditableWarning
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onFocus={handleInstructionFocus}
+                onBlur={handleInstructionBlur}
+                onKeyUp={handleSelectionChange}
+                onMouseUp={handleSelectionChange}
+              />
+              
+            </div>
           </div>
         </div>
+
+        {/* Floating Plus Button - rendered via portal */}
+        {showPlusButton && createPortal(
+          <button 
+            className="instruction-plus-btn"
+            style={{ 
+              position: 'fixed',
+              left: `${plusButtonPosition.x}px`,
+              top: `${plusButtonPosition.y}px`
+            }}
+            onClick={() => setShowPlusMenu(!showPlusMenu)}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            +
+          </button>,
+          document.body
+        )}
+        
+        {/* Plus Menu Dropdown - rendered via portal */}
+        {showPlusMenu && createPortal(
+          <div 
+            className="instruction-plus-menu"
+            style={{ 
+              position: 'fixed',
+              left: `${plusButtonPosition.x}px`,
+              top: `${plusButtonPosition.y + 32}px`
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            <button onMouseDown={(e) => { e.preventDefault(); handleAddWelcome(); }}>
+              <span className="menu-icon">👋</span>
+              Add welcome message
+            </button>
+            <button onMouseDown={(e) => { e.preventDefault(); handleViewExamples(); }}>
+              <span className="menu-icon">📋</span>
+              View and add example
+            </button>
+            <button onMouseDown={(e) => { e.preventDefault(); if (!isOptimizing) handleOptimizeInstruction(); }} disabled={isOptimizing}>
+              <span className="menu-icon">{isOptimizing ? '⏳' : '✨'}</span>
+              {isOptimizing ? 'Optimizing...' : 'Optimize my instruction'}
+            </button>
+            <button onMouseDown={(e) => { e.preventDefault(); handleShowCapabilityPicker(); }}>
+              <span className="menu-icon">⚡</span>
+              Add capability
+            </button>
+          </div>,
+          document.body
+        )}
+        
+        {/* Capability Picker Dropdown - rendered via portal */}
+        {showCapabilityPicker && createPortal(
+          <div 
+            className="instruction-capability-picker"
+            style={{ 
+              position: 'fixed',
+              left: `${plusButtonPosition.x}px`,
+              top: `${plusButtonPosition.y + 32}px`
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            <div className="picker-header">Select a capability</div>
+            {capabilities.filter(c => c.enabled).map(cap => (
+              <button 
+                key={cap.id} 
+                onMouseDown={(e) => { e.preventDefault(); insertCapabilityAtCursor(cap); }}
+                className={`picker-item type-${cap.type.toLowerCase()}`}
+              >
+                <span className="picker-icon">⚡</span>
+                <span className="picker-name">{cap.name}</span>
+                <span className={`picker-type type-${cap.type.toLowerCase()}`}>{cap.type}</span>
+              </button>
+            ))}
+          </div>,
+          document.body
+        )}
 
         {/* Right: Settings Sidebar */}
         <div className="configure-sidebar">
@@ -428,6 +849,39 @@ export default function AgentConfigure() {
                 Save Settings
               </Button>
             </div>
+          </ModalFooter>
+        </Modal>
+      )}
+
+      {/* Examples Modal */}
+      {showExamplesModal && (
+        <Modal onClose={() => setShowExamplesModal(false)}>
+          <ModalHeader title="Instruction Examples" onClose={() => setShowExamplesModal(false)} />
+          <ModalBody>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
+              Choose a template to get started quickly. This will replace your current instruction.
+            </p>
+            <div className="examples-grid">
+              {EXAMPLE_TEMPLATES.map(template => (
+                <div 
+                  key={template.id} 
+                  className="example-card"
+                  onClick={() => handleApplyTemplate(template)}
+                >
+                  <h4 className="example-card-title">{template.name}</h4>
+                  <p className="example-card-description">{template.description}</p>
+                  <div className="example-card-preview">
+                    {template.content.slice(0, 120)}...
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <div></div>
+            <Button variant="secondary" onClick={() => setShowExamplesModal(false)}>
+              Cancel
+            </Button>
           </ModalFooter>
         </Modal>
       )}
