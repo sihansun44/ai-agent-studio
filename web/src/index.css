@@ -3269,7 +3269,7 @@ select.configure-input option {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
+  padding: 4px 12px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-bottom: none;
@@ -3297,14 +3297,14 @@ select.configure-input option {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   background: transparent;
   border: none;
   border-radius: 6px;
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -3327,18 +3327,18 @@ select.configure-input option {
 
 .instruction-toolbar .toolbar-btn-primary {
   width: auto;
-  padding: 0 16px;
-  height: 32px;
+  padding: 0 12px;
+  height: 28px;
   background: transparent;
-  border: 1px solid var(--outline-color);
+  border: none;
   color: var(--text-primary);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  border-radius: 20px;
+  border-radius: 14px;
 }
 
 .instruction-toolbar .toolbar-btn-primary:hover {
-  background: var(--button-secondary-active);
+  background: rgba(255, 255, 255, 0.1);
   color: var(--text-primary);
 }
 
@@ -3393,7 +3393,7 @@ select.configure-input option {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease;
   z-index: 100;
 }
 
@@ -3439,9 +3439,23 @@ select.configure-input option {
 }
 
 .instruction-plus-menu .menu-icon {
-  font-size: 16px;
   width: 20px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.instruction-plus-menu .menu-icon svg {
+  flex-shrink: 0;
+}
+
+.instruction-plus-menu .menu-icon .spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* Capability Picker Dropdown */

@@ -138,7 +138,7 @@ export default function AgentConfigure() {
     }
   }, []);
 
-  // Update plus button position based on cursor - always at end of line
+  // Update plus button position based on cursor - at end of current line's text
   const updatePlusButtonPosition = () => {
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0 && instructionRef.current) {
@@ -148,10 +148,40 @@ export default function AgentConfigure() {
         const containerRect = instructionRef.current.getBoundingClientRect();
         
         if (cursorRect.top > 0) {
-          // Position at the end of the current line (32px from right edge)
+          // Find the end of text on current line by creating a range to end of line
+          const lineRange = document.createRange();
+          const node = range.startContainer;
+          
+          // Try to find end of current text node or line
+          let endX = cursorRect.right;
+          
+          if (node.nodeType === Node.TEXT_NODE) {
+            // Get the text content and find where the line ends
+            const text = node.textContent || '';
+            const offset = range.startOffset;
+            
+            // Find the next line break or end of text
+            let lineEndOffset = text.indexOf('\n', offset);
+            if (lineEndOffset === -1) lineEndOffset = text.length;
+            
+            // Create a range to measure end position
+            const tempRange = document.createRange();
+            tempRange.setStart(node, Math.min(lineEndOffset, text.length));
+            tempRange.setEnd(node, Math.min(lineEndOffset, text.length));
+            const endRect = tempRange.getBoundingClientRect();
+            
+            if (endRect.right > 0 && endRect.top === cursorRect.top) {
+              endX = endRect.right;
+            }
+          }
+          
+          // Cap at container right edge minus padding
+          const maxX = containerRect.right - 32;
+          endX = Math.min(endX + 12, maxX);
+          
           setPlusButtonPosition({
-            x: containerRect.right - 32,
-            y: cursorRect.top - 2
+            x: endX,
+            y: cursorRect.top - 4
           });
         }
       }
@@ -589,19 +619,41 @@ You are a professional customer support agent for Acme Corporation, dedicated to
             onMouseDown={(e) => e.preventDefault()}
           >
             <button onMouseDown={(e) => { e.preventDefault(); handleAddWelcome(); }}>
-              <span className="menu-icon">👋</span>
+              <span className="menu-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+              </span>
               Add welcome message
             </button>
             <button onMouseDown={(e) => { e.preventDefault(); handleViewExamples(); }}>
-              <span className="menu-icon">📋</span>
+              <span className="menu-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                </svg>
+              </span>
               View and add example
             </button>
             <button onMouseDown={(e) => { e.preventDefault(); if (!isOptimizing) handleOptimizeInstruction(); }} disabled={isOptimizing}>
-              <span className="menu-icon">{isOptimizing ? '⏳' : '✨'}</span>
+              <span className="menu-icon">
+                {isOptimizing ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="spinning">
+                    <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29a.996.996 0 00-1.41 0L1.29 18.96a.996.996 0 000 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05a.996.996 0 000-1.41l-2.33-2.35zm-1.03 5.49l-2.12-2.12 2.44-2.44 2.12 2.12-2.44 2.44z"/>
+                  </svg>
+                )}
+              </span>
               {isOptimizing ? 'Optimizing...' : 'Optimize my instruction'}
             </button>
             <button onMouseDown={(e) => { e.preventDefault(); handleShowCapabilityPicker(); }}>
-              <span className="menu-icon">⚡</span>
+              <span className="menu-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M13 13v8h8v-8h-8zM3 21h8v-8H3v8zM3 3v8h8V3H3zm13.66-1.31L11 7.34 16.66 13l5.66-5.66-5.66-5.65z"/>
+                </svg>
+              </span>
               Add capability
             </button>
           </div>,
