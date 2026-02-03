@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connections - Webex AI Agent Studio</title>
+  <link rel="stylesheet" href="wireframe-styles.css">
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME: Connections</div>
+  
+  <!-- Header -->
+  <header class="app-header">
+    <div class="app-logo">Webex AI Agent Studio</div>
+    <div class="header-search">
+      <input type="text" placeholder="Search agents, knowledge, connections...">
+    </div>
+    <div class="header-actions">
+      <div class="header-icon">?</div>
+      <div class="header-icon">🔔</div>
+      <div class="header-icon">👤</div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item" href="01-dashboard.html">Dashboard</a></li>
+          <li><a class="sidebar-nav-item" href="02-agents-list.html">Agents</a></li>
+          <li><a class="sidebar-nav-item" href="06-knowledge-pool.html">Knowledge</a></li>
+          <li><a class="sidebar-nav-item active" href="07-connections.html">Connections</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item" href="#">Organization Settings</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Connections</h1>
+          <p class="page-subtitle">Manage third-party service integrations</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary">+ Add Service</button>
+        </div>
+      </div>
+
+      <!-- Info Banner -->
+      <div class="card" style="background: #e7f3ff; border-color: #b3d7ff; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center;">
+          <span style="font-size: 20px; margin-right: 12px;">ℹ️</span>
+          <div>
+            <div style="font-weight: 500;">Channels are managed in Control Hub</div>
+            <div style="font-size: 13px; color: var(--text-secondary);">
+              Webex, Slack, Voice, and other channel configurations are handled in the Admin Portal.
+              <a href="#" style="color: var(--accent-color);">Open Control Hub →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab active">Third-Party Services (4)</div>
+        <div class="tab">Webhooks (2)</div>
+        <div class="tab">API Credentials</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-4" style="margin-bottom: 24px;">
+        <div class="stat-card">
+          <div class="stat-label">Connected Services</div>
+          <div class="stat-value">4</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Healthy</div>
+          <div class="stat-value" style="color: var(--success-color);">3</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Needs Attention</div>
+          <div class="stat-value" style="color: var(--danger-color);">1</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Agents Using</div>
+          <div class="stat-value">6</div>
+        </div>
+      </div>
+
+      <!-- Services List -->
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>Status</th>
+              <th>Used by Agents</th>
+              <th>Permissions</th>
+              <th>Last Verified</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div style="display: flex; align-items: center;">
+                  <div style="width: 36px; height: 36px; border-radius: 8px; background: #e3f2fd; margin-right: 12px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#00A1E0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                  </div>
+                  <div>
+                    <div style="font-weight: 500;">Salesforce</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">CRM integration</div>
+                  </div>
+                </div>
+              </td>
+              <td><span style="color: var(--success-color);">● Connected</span></td>
+              <td>
+                <span style="font-size: 13px;">Customer Support Bot, Sales Assistant</span>
+              </td>
+              <td style="font-size: 13px;">Read/Write Cases, Read Contacts</td>
+              <td>2 hours ago</td>
+              <td>
+                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 12px; margin-right: 4px;">Configure</button>
+                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 12px;">Test</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="display: flex; align-items: center;">
+                  <div style="width: 36px; height: 36px; border-radius: 8px; background: #e8f5e9; margin-right: 12px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#81B543"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                  </div>
+                  <div>
+                    <div style="font-weight: 500;">ServiceNow</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">IT Service Management</div>
+                  </div>
+                </div>
+              </td>
+              <td><span style="color: var(--success-color);">● Connected</span></td>
+              <td>
+                <span style="font-size: 13px;">IT Support Agent, Customer Support Bot</span>
+              </td>
+              <td style="font-size: 13px;">Read/Write Incidents</td>
+              <td>1 day ago</td>
+              <td>
+                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 12px; margin-right: 4px;">Configure</button>
+                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 12px;">Test</button>
+              </td>
+            </tr>
+            <tr style="background: #fff5f5;">
+              <td>
+                <div style="display: flex; align-items: center;">
+                  <div style="width: 36px; height: 36px; border-radius: 8px; background: #fce4ec; margin-right: 12px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#03363D"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                  </div>
+                  <div>
+                    <div style="font-weight: 500;">Zendesk</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Customer support platform</div>
+                  </div>
+                </div>
+              </td>
+              <td><span style="color: var(--danger-color);">● Auth Expired</span></td>
+              <td>
+                <span style="font-size: 13px; color: var(--text-muted);">Not in use</span>
+              </td>
+              <td style="font-size: 13px; color: var(--text-muted);">—</td>
+              <td style="color: var(--danger-color);">3 days ago</td>
+              <td>
+                <button class="btn btn-primary" style="padding: 4px 12px; font-size: 12px;">Reconnect</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="display: flex; align-items: center;">
+                  <div style="width: 36px; height: 36px; border-radius: 8px; background: #e3f2fd; margin-right: 12px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#0052CC"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+                  </div>
+                  <div>
+                    <div style="font-weight: 500;">Jira</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Project management</div>
+                  </div>
+                </div>
+              </td>
+              <td><span style="color: var(--success-color);">● Connected</span></td>
+              <td>
+                <span style="font-size: 13px;">IT Support Agent</span>
+              </td>
+              <td style="font-size: 13px;">Read/Write Issues</td>
+              <td>1 week ago</td>
+              <td>
+                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 12px; margin-right: 4px;">Configure</button>
+                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 12px;">Test</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Add Service Preview -->
+      <div class="card" style="margin-top: 32px; border: 2px dashed var(--border-color); background: #fafafa;">
+        <h3 class="card-title" style="margin-bottom: 16px; color: var(--text-secondary);">Add Service (Modal Preview)</h3>
+        <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">Select a service to connect:</p>
+        <div class="grid grid-4">
+          <div class="card" style="text-align: center; cursor: pointer; padding: 16px;">
+            <div style="font-size: 24px; margin-bottom: 8px;">☁️</div>
+            <div style="font-weight: 500; font-size: 13px;">Salesforce</div>
+          </div>
+          <div class="card" style="text-align: center; cursor: pointer; padding: 16px;">
+            <div style="font-size: 24px; margin-bottom: 8px;">🔧</div>
+            <div style="font-weight: 500; font-size: 13px;">ServiceNow</div>
+          </div>
+          <div class="card" style="text-align: center; cursor: pointer; padding: 16px;">
+            <div style="font-size: 24px; margin-bottom: 8px;">💬</div>
+            <div style="font-weight: 500; font-size: 13px;">Zendesk</div>
+          </div>
+          <div class="card" style="text-align: center; cursor: pointer; padding: 16px;">
+            <div style="font-size: 24px; margin-bottom: 8px;">📋</div>
+            <div style="font-weight: 500; font-size: 13px;">Jira</div>
+          </div>
+          <div class="card" style="text-align: center; cursor: pointer; padding: 16px;">
+            <div style="font-size: 24px; margin-bottom: 8px;">📧</div>
+            <div style="font-weight: 500; font-size: 13px;">SendGrid</div>
+          </div>
+          <div class="card" style="text-align: center; cursor: pointer; padding: 16px;">
+            <div style="font-size: 24px; margin-bottom: 8px;">📊</div>
+            <div style="font-weight: 500; font-size: 13px;">HubSpot</div>
+          </div>
+          <div class="card" style="text-align: center; cursor: pointer; padding: 16px;">
+            <div style="font-size: 24px; margin-bottom: 8px;">💼</div>
+            <div style="font-weight: 500; font-size: 13px;">Workday</div>
+          </div>
+          <div class="card" style="text-align: center; cursor: pointer; padding: 16px;">
+            <div style="font-size: 24px; margin-bottom: 8px;">🔗</div>
+            <div style="font-weight: 500; font-size: 13px;">Custom API</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

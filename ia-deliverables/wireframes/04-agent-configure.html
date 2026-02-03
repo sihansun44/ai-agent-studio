@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Support Bot - Configure - Webex AI Agent Studio</title>
+  <link rel="stylesheet" href="wireframe-styles.css">
+  <style>
+    .config-sidebar {
+      width: 200px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      height: calc(100vh - 56px - 60px);
+    }
+    .config-nav-item {
+      display: block;
+      padding: 10px 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .config-nav-item:hover {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+    .config-nav-item.active {
+      background: #e7f1ff;
+      color: var(--accent-color);
+      font-weight: 500;
+      border-right: 3px solid var(--accent-color);
+    }
+    .config-content {
+      flex: 1;
+      padding: 24px;
+    }
+    .config-wrapper {
+      display: flex;
+      margin: -24px;
+    }
+    .section-content {
+      display: none;
+    }
+    .section-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME: Agent Configure</div>
+  
+  <!-- Header -->
+  <header class="app-header">
+    <div class="app-logo">Webex AI Agent Studio</div>
+    <div class="header-search">
+      <input type="text" placeholder="Search agents, knowledge, connections...">
+    </div>
+    <div class="header-actions">
+      <div class="header-icon">?</div>
+      <div class="header-icon">🔔</div>
+      <div class="header-icon">👤</div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item" href="01-dashboard.html">Dashboard</a></li>
+          <li><a class="sidebar-nav-item active" href="02-agents-list.html">Agents</a></li>
+          <li><a class="sidebar-nav-item" href="06-knowledge-pool.html">Knowledge</a></li>
+          <li><a class="sidebar-nav-item" href="07-connections.html">Connections</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Customer Support Bot</div>
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item nested" href="03-agent-overview.html">Overview</a></li>
+          <li><a class="sidebar-nav-item nested active" href="04-agent-configure.html">Configure</a></li>
+          <li><a class="sidebar-nav-item nested" href="05-agent-monitor.html">Monitor</a></li>
+          <li><a class="sidebar-nav-item nested" href="#">Changelog</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item" href="#">Organization Settings</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Agent Header -->
+      <div class="agent-header">
+        <div class="agent-avatar">CS</div>
+        <div class="agent-info">
+          <div class="agent-name">Customer Support Bot</div>
+          <div class="agent-meta">Configure your agent settings</div>
+        </div>
+        <span class="badge badge-success" style="margin-right: 16px;">Published</span>
+        <button class="btn btn-secondary" style="margin-right: 8px;">Discard Changes</button>
+        <button class="btn btn-primary">Save Changes</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <a class="tab" href="03-agent-overview.html">Overview</a>
+        <div class="tab active">Configure</div>
+        <a class="tab" href="05-agent-monitor.html">Monitor</a>
+        <div class="tab">Changelog</div>
+      </div>
+
+      <!-- Config Wrapper -->
+      <div class="config-wrapper">
+        <!-- Config Sidebar -->
+        <nav class="config-sidebar">
+          <a class="config-nav-item active" onclick="showSection('general')">General</a>
+          <a class="config-nav-item" onclick="showSection('prompt')">Prompt</a>
+          <a class="config-nav-item" onclick="showSection('knowledge')">Knowledge</a>
+          <a class="config-nav-item" onclick="showSection('capabilities')">Capabilities</a>
+          <a class="config-nav-item" onclick="showSection('connections')">Connections</a>
+          <a class="config-nav-item" onclick="showSection('testing')">Testing</a>
+        </nav>
+
+        <!-- Config Content -->
+        <div class="config-content">
+          <!-- General Section -->
+          <div id="section-general" class="section-content active">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 24px;">General Settings</h2>
+            
+            <div class="card">
+              <div class="form-group">
+                <label class="form-label">Agent Name</label>
+                <input type="text" class="form-input" value="Customer Support Bot">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-textarea" style="min-height: 80px;">Handles customer inquiries and support tickets. This agent can search knowledge bases, create tickets, and escalate to human agents when needed.</textarea>
+              </div>
+
+              <div class="grid grid-2" style="gap: 20px;">
+                <div class="form-group">
+                  <label class="form-label">Avatar</label>
+                  <div style="display: flex; align-items: center; gap: 16px;">
+                    <div style="width: 64px; height: 64px; border-radius: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: 600;">CS</div>
+                    <button class="btn btn-secondary">Change Avatar</button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Primary Language</label>
+                  <select class="form-select">
+                    <option selected>English (US)</option>
+                    <option>English (UK)</option>
+                    <option>Spanish</option>
+                    <option>French</option>
+                    <option>German</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Agent ID</label>
+                <input type="text" class="form-input" value="agent_cs_bot_01" readonly style="background: var(--bg-primary);">
+                <p class="form-help">This ID is used in API calls and cannot be changed.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prompt Section -->
+          <div id="section-prompt" class="section-content">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 24px;">System Prompt</h2>
+            
+            <div class="card">
+              <div class="form-group">
+                <label class="form-label">System Prompt</label>
+                <textarea class="form-textarea" style="min-height: 300px; font-family: Monaco, Menlo, monospace; font-size: 13px;">You are a helpful customer support agent for Acme Corporation. Your role is to assist customers with their inquiries, troubleshoot issues, and provide accurate information about our products and services.
+
+## Guidelines:
+- Always be polite, professional, and empathetic
+- If you don't know the answer, search the knowledge base first
+- For complex issues, offer to create a support ticket
+- Escalate to a human agent when the customer requests it or when the issue is beyond your capabilities
+
+## Available Actions:
+- Search knowledge base for relevant articles
+- Create support tickets in Salesforce
+- Look up customer account information
+- Escalate to human agent
+
+## Response Format:
+- Keep responses concise but complete
+- Use bullet points for lists
+- Include relevant links when available</textarea>
+                <p class="form-help">This prompt instructs the AI on how to behave. Use markdown formatting.</p>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Variables</label>
+                <div style="background: var(--bg-primary); padding: 12px; border-radius: 4px; font-size: 13px; font-family: monospace;">
+                  <div style="margin-bottom: 8px;"><code>{{customer_name}}</code> - Customer's display name</div>
+                  <div style="margin-bottom: 8px;"><code>{{account_id}}</code> - Customer's account ID</div>
+                  <div><code>{{current_date}}</code> - Today's date</div>
+                </div>
+                <button class="btn btn-secondary" style="margin-top: 12px;">+ Add Variable</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Version History</h3>
+                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 12px;">View All</button>
+              </div>
+              <div style="font-size: 14px;">
+                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                  <div>
+                    <div style="font-weight: 500;">Current version</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">2 hours ago by @sarah.admin</div>
+                  </div>
+                  <span class="badge badge-success">Active</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                  <div>
+                    <div style="font-weight: 500;">Added escalation guidelines</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">1 day ago by @marcus.dev</div>
+                  </div>
+                  <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 11px;">Restore</button>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                  <div>
+                    <div style="font-weight: 500;">Initial prompt setup</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">1 week ago by @marcus.dev</div>
+                  </div>
+                  <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 11px;">Restore</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Knowledge Section -->
+          <div id="section-knowledge" class="section-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <h2 style="font-size: 20px; font-weight: 600;">Knowledge Sources</h2>
+              <a href="06-knowledge-pool.html" class="btn btn-secondary">Manage Knowledge Pool →</a>
+            </div>
+            
+            <div class="card">
+              <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">
+                Select knowledge sources from the organization pool that this agent can access.
+              </p>
+              
+              <div class="table-container" style="border: none;">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th style="width: 40px;"></th>
+                      <th>Source</th>
+                      <th>Type</th>
+                      <th>Documents</th>
+                      <th>Last Synced</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input type="checkbox" checked></td>
+                      <td><strong>Product Documentation</strong></td>
+                      <td>Documents</td>
+                      <td>156</td>
+                      <td>3 hours ago</td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox" checked></td>
+                      <td><strong>FAQ Database</strong></td>
+                      <td>Database</td>
+                      <td>1,234</td>
+                      <td>6 hours ago</td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox" checked></td>
+                      <td><strong>Support Articles</strong></td>
+                      <td>Website</td>
+                      <td>89</td>
+                      <td>Syncing...</td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox"></td>
+                      <td><strong>Policy Documents</strong></td>
+                      <td>Documents</td>
+                      <td>45</td>
+                      <td>1 day ago</td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox"></td>
+                      <td><strong>Release Notes</strong></td>
+                      <td>Documents</td>
+                      <td>78</td>
+                      <td>2 days ago</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom: 16px;">Agent-Specific Settings</h3>
+              <div class="form-group">
+                <label class="form-label">Search Priority</label>
+                <select class="form-select">
+                  <option>Relevance (default)</option>
+                  <option>Most Recent First</option>
+                  <option>Custom Weighting</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Max Results per Query</label>
+                <input type="number" class="form-input" value="5" style="width: 100px;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Capabilities Section -->
+          <div id="section-capabilities" class="section-content">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 24px;">Capabilities</h2>
+            
+            <!-- Filter Tabs -->
+            <div class="tabs" style="margin-bottom: 0;">
+              <div class="tab active">All (12)</div>
+              <div class="tab">Actions (5)</div>
+              <div class="tab">MCP Servers (4)</div>
+              <div class="tab">Skills (3)</div>
+            </div>
+
+            <div class="filter-bar">
+              <input type="text" placeholder="Search capabilities...">
+              <button class="btn btn-primary">+ Add Capability</button>
+            </div>
+
+            <div class="card" style="padding: 0;">
+              <!-- Capabilities List -->
+              <div class="capability-item">
+                <input type="checkbox" class="capability-checkbox" checked>
+                <span class="capability-name">Create Salesforce Ticket</span>
+                <span class="capability-type">Action</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <input type="checkbox" class="capability-checkbox" checked>
+                <span class="capability-name">Search Knowledge Base</span>
+                <span class="capability-type">Action</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <input type="checkbox" class="capability-checkbox" checked>
+                <span class="capability-name">Lookup Customer Account</span>
+                <span class="capability-type">Action</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <input type="checkbox" class="capability-checkbox" checked>
+                <span class="capability-name">Escalate to Human Agent</span>
+                <span class="capability-type">Action</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <input type="checkbox" class="capability-checkbox" checked>
+                <span class="capability-name">Send Email Notification</span>
+                <span class="capability-type">Action</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <input type="checkbox" class="capability-checkbox" checked>
+                <span class="capability-name">GitHub MCP Server</span>
+                <span class="capability-type">MCP</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <input type="checkbox" class="capability-checkbox" checked>
+                <span class="capability-name">Postgres MCP Server</span>
+                <span class="capability-type">MCP</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <input type="checkbox" class="capability-checkbox" checked>
+                <span class="capability-name">Slack MCP Server</span>
+                <span class="capability-type">MCP</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <input type="checkbox" class="capability-checkbox">
+                <span class="capability-name">Filesystem MCP Server</span>
+                <span class="capability-type">MCP</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <input type="checkbox" class="capability-checkbox" checked>
+                <span class="capability-name">Calendar Management</span>
+                <span class="capability-type">Skill</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <input type="checkbox" class="capability-checkbox" checked>
+                <span class="capability-name">Sentiment Analysis</span>
+                <span class="capability-type">Skill</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <input type="checkbox" class="capability-checkbox">
+                <span class="capability-name">Language Translation</span>
+                <span class="capability-type">Skill</span>
+                <span class="capability-action">Configure</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Connections Section -->
+          <div id="section-connections" class="section-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <h2 style="font-size: 20px; font-weight: 600;">Connected Services</h2>
+              <a href="07-connections.html" class="btn btn-secondary">Manage Connections →</a>
+            </div>
+            
+            <div class="card">
+              <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">
+                Select which third-party services this agent can access from the organization pool.
+              </p>
+              
+              <div class="table-container" style="border: none;">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th style="width: 40px;"></th>
+                      <th>Service</th>
+                      <th>Status</th>
+                      <th>Permissions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input type="checkbox" checked></td>
+                      <td><strong>Salesforce</strong></td>
+                      <td><span style="color: var(--success-color);">● Connected</span></td>
+                      <td>Read/Write Cases, Read Contacts</td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox" checked></td>
+                      <td><strong>ServiceNow</strong></td>
+                      <td><span style="color: var(--success-color);">● Connected</span></td>
+                      <td>Read/Write Incidents</td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox"></td>
+                      <td><strong>Zendesk</strong></td>
+                      <td><span style="color: var(--danger-color);">● Auth Expired</span></td>
+                      <td>—</td>
+                    </tr>
+                    <tr>
+                      <td><input type="checkbox"></td>
+                      <td><strong>Jira</strong></td>
+                      <td><span style="color: var(--success-color);">● Connected</span></td>
+                      <td>Read/Write Issues</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testing Section -->
+          <div id="section-testing" class="section-content">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 24px;">Testing Playground</h2>
+            
+            <div class="grid grid-2">
+              <div>
+                <div class="chat-container">
+                  <div class="chat-messages">
+                    <div class="chat-message user">
+                      <div class="chat-bubble">Hi, I'm having trouble logging into my account</div>
+                    </div>
+                    <div class="chat-message agent">
+                      <div class="chat-bubble">Hello! I'd be happy to help you with your login issue. Could you please provide me with your account email or account ID so I can look up your account?</div>
+                    </div>
+                    <div class="chat-message user">
+                      <div class="chat-bubble">Sure, it's john.doe@example.com</div>
+                    </div>
+                    <div class="chat-message agent">
+                      <div class="chat-bubble">Thank you, John. I found your account. I can see there was a recent password reset request. Would you like me to send a new password reset link to your email, or would you prefer to try a different solution?</div>
+                    </div>
+                  </div>
+                  <div class="chat-input">
+                    <input type="text" placeholder="Type a message to test the agent...">
+                    <button class="btn btn-primary">Send</button>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="card">
+                  <h3 class="card-title" style="margin-bottom: 16px;">Debug Information</h3>
+                  <div style="font-size: 13px; font-family: monospace; background: #1a1a2e; color: #a0a0a0; padding: 16px; border-radius: 4px; max-height: 300px; overflow-y: auto;">
+                    <div style="color: #4ade80; margin-bottom: 8px;">[Action] Lookup Customer Account</div>
+                    <div style="margin-left: 16px; margin-bottom: 8px;">
+                      Input: {"email": "john.doe@example.com"}<br>
+                      Output: {"account_id": "ACC-12345", "name": "John Doe", "status": "active"}
+                    </div>
+                    <div style="color: #60a5fa; margin-bottom: 8px;">[Knowledge] Search: "password reset"</div>
+                    <div style="margin-left: 16px; margin-bottom: 8px;">
+                      Found 3 relevant articles<br>
+                      Top match: "Password Reset Guide" (0.94)
+                    </div>
+                    <div style="color: #fbbf24; margin-bottom: 8px;">[Model] Response generated</div>
+                    <div style="margin-left: 16px;">
+                      Tokens: 156 in, 89 out<br>
+                      Latency: 1.2s
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <h3 class="card-title" style="margin-bottom: 16px;">Test Controls</h3>
+                  <div class="form-group">
+                    <label class="form-label">Test as User</label>
+                    <select class="form-select">
+                      <option>Anonymous User</option>
+                      <option>John Doe (Premium)</option>
+                      <option>Jane Smith (Basic)</option>
+                    </select>
+                  </div>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-secondary" style="flex: 1;">Clear Chat</button>
+                    <button class="btn btn-secondary" style="flex: 1;">Export</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.section-content').forEach(el => {
+        el.classList.remove('active');
+      });
+      // Show selected section
+      document.getElementById('section-' + sectionId).classList.add('active');
+      
+      // Update nav active state
+      document.querySelectorAll('.config-nav-item').forEach(el => {
+        el.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>

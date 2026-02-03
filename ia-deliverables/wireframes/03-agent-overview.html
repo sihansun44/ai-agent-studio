@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Support Bot - Overview - Webex AI Agent Studio</title>
+  <link rel="stylesheet" href="wireframe-styles.css">
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME: Agent Overview</div>
+  
+  <!-- Header -->
+  <header class="app-header">
+    <div class="app-logo">Webex AI Agent Studio</div>
+    <div class="header-search">
+      <input type="text" placeholder="Search agents, knowledge, connections...">
+    </div>
+    <div class="header-actions">
+      <div class="header-icon">?</div>
+      <div class="header-icon">🔔</div>
+      <div class="header-icon">👤</div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item" href="01-dashboard.html">Dashboard</a></li>
+          <li><a class="sidebar-nav-item active" href="02-agents-list.html">Agents</a></li>
+          <li><a class="sidebar-nav-item" href="06-knowledge-pool.html">Knowledge</a></li>
+          <li><a class="sidebar-nav-item" href="07-connections.html">Connections</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Customer Support Bot</div>
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item nested active" href="03-agent-overview.html">Overview</a></li>
+          <li><a class="sidebar-nav-item nested" href="04-agent-configure.html">Configure</a></li>
+          <li><a class="sidebar-nav-item nested" href="05-agent-monitor.html">Monitor</a></li>
+          <li><a class="sidebar-nav-item nested" href="#">Changelog</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item" href="#">Organization Settings</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Agent Header -->
+      <div class="agent-header">
+        <div class="agent-avatar">CS</div>
+        <div class="agent-info">
+          <div class="agent-name">Customer Support Bot</div>
+          <div class="agent-meta">Handles customer inquiries and support tickets • Last updated 2 hours ago</div>
+        </div>
+        <span class="badge badge-success" style="margin-right: 16px;">Published</span>
+        <button class="btn btn-secondary" style="margin-right: 8px;">Unpublish</button>
+        <button class="btn btn-primary">New Version</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab active">Overview</div>
+        <a class="tab" href="04-agent-configure.html">Configure</a>
+        <a class="tab" href="05-agent-monitor.html">Monitor</a>
+        <div class="tab">Changelog</div>
+      </div>
+
+      <!-- Content Grid -->
+      <div class="grid grid-2">
+        <!-- Left Column -->
+        <div>
+          <!-- Quick Stats -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 16px;">Quick Stats (Last 7 days)</h3>
+            <div class="grid grid-2" style="gap: 12px;">
+              <div class="stat-card" style="padding: 16px;">
+                <div class="stat-label">Sessions</div>
+                <div class="stat-value" style="font-size: 24px;">5,234</div>
+                <div class="stat-change positive">↑ 12% vs last week</div>
+              </div>
+              <div class="stat-card" style="padding: 16px;">
+                <div class="stat-label">Messages</div>
+                <div class="stat-value" style="font-size: 24px;">18,921</div>
+                <div class="stat-change positive">↑ 8% vs last week</div>
+              </div>
+              <div class="stat-card" style="padding: 16px;">
+                <div class="stat-label">Success Rate</div>
+                <div class="stat-value" style="font-size: 24px;">94.2%</div>
+                <div class="stat-change positive">↑ 2.1%</div>
+              </div>
+              <div class="stat-card" style="padding: 16px;">
+                <div class="stat-label">Avg Response</div>
+                <div class="stat-value" style="font-size: 24px;">1.2s</div>
+                <div class="stat-change positive">↓ 0.3s faster</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Configuration Summary -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Configuration Summary</h3>
+              <a href="04-agent-configure.html" class="btn btn-secondary" style="padding: 4px 12px; font-size: 12px;">Edit</a>
+            </div>
+            <div style="font-size: 14px;">
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span style="color: var(--text-secondary);">Knowledge Sources</span>
+                <span style="font-weight: 500;">3 assigned</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span style="color: var(--text-secondary);">Capabilities</span>
+                <span style="font-weight: 500;">12 enabled</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span style="color: var(--text-secondary);">Connected Services</span>
+                <span style="font-weight: 500;">2 active</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                <span style="color: var(--text-secondary);">Last Config Change</span>
+                <span style="font-weight: 500;">2 hours ago by @sarah.admin</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 16px;">Recent Activity</h3>
+            <div style="font-size: 14px;">
+              <div style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <div style="font-weight: 500;">Prompt updated</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">by @sarah.admin • 2 hours ago</div>
+              </div>
+              <div style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <div style="font-weight: 500;">Published to production</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">by @sarah.admin • 1 day ago</div>
+              </div>
+              <div style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <div style="font-weight: 500;">Knowledge source "FAQ Database" assigned</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">by @marcus.dev • 3 days ago</div>
+              </div>
+              <div style="padding: 10px 0;">
+                <div style="font-weight: 500;">Salesforce action added</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">by @marcus.dev • 1 week ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div>
+          <!-- Deployments Widget - READ ONLY -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 16px;">Deployments</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Where this agent is embedded (read-only)</p>
+            
+            <div class="deployment-widget">
+              <!-- FlowBuilder Digital -->
+              <div class="deployment-section">
+                <div class="deployment-section-title">FlowBuilder Digital</div>
+                <div class="deployment-item">
+                  <span>Customer Support Flow</span>
+                  <a href="#" class="deployment-link">View in FlowBuilder →</a>
+                </div>
+                <div class="deployment-item">
+                  <span>Website Chat Flow</span>
+                  <a href="#" class="deployment-link">View in FlowBuilder →</a>
+                </div>
+                <div class="deployment-item">
+                  <span>Mobile App Support Flow</span>
+                  <a href="#" class="deployment-link">View in FlowBuilder →</a>
+                </div>
+              </div>
+
+              <!-- FlowBuilder Voice -->
+              <div class="deployment-section">
+                <div class="deployment-section-title">FlowBuilder Voice</div>
+                <div class="deployment-item">
+                  <span>IVR Support Flow</span>
+                  <a href="#" class="deployment-link">View in FlowBuilder →</a>
+                </div>
+                <div class="deployment-item">
+                  <span>Callback Handler Flow</span>
+                  <a href="#" class="deployment-link">View in FlowBuilder →</a>
+                </div>
+              </div>
+
+              <!-- External Link -->
+              <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">
+                  Channels are managed in Control Hub
+                </div>
+                <a href="#" class="btn btn-secondary" style="font-size: 12px; padding: 6px 12px;">
+                  Open Control Hub →
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Version Info -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 16px;">Version Information</h3>
+            <div style="font-size: 14px;">
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span style="color: var(--text-secondary);">Current Version</span>
+                <span style="font-weight: 500;">v2.4.1</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span style="color: var(--text-secondary);">Published On</span>
+                <span style="font-weight: 500;">Jan 27, 2026</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                <span style="color: var(--text-secondary);">Published By</span>
+                <span style="font-weight: 500;">@sarah.admin</span>
+              </div>
+            </div>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 16px;">View Changelog</button>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 16px;">Quick Actions</h3>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <a href="04-agent-configure.html?tab=testing" class="btn btn-secondary" style="justify-content: flex-start;">
+                Test in Playground
+              </a>
+              <a href="05-agent-monitor.html" class="btn btn-secondary" style="justify-content: flex-start;">
+                View Analytics
+              </a>
+              <a href="05-agent-monitor.html?tab=sessions" class="btn btn-secondary" style="justify-content: flex-start;">
+                Browse Sessions
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

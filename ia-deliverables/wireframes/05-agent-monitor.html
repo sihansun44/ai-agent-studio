@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Support Bot - Monitor - Webex AI Agent Studio</title>
+  <link rel="stylesheet" href="wireframe-styles.css">
+  <style>
+    .chart-placeholder {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+      border: 2px dashed var(--border-color);
+      border-radius: 8px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .session-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .session-item:hover {
+      background: var(--bg-primary);
+    }
+    .session-status {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+    .session-status.success { background: var(--success-color); }
+    .session-status.warning { background: var(--warning-color); }
+    .session-status.error { background: var(--danger-color); }
+  </style>
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME: Agent Monitor</div>
+  
+  <!-- Header -->
+  <header class="app-header">
+    <div class="app-logo">Webex AI Agent Studio</div>
+    <div class="header-search">
+      <input type="text" placeholder="Search agents, knowledge, connections...">
+    </div>
+    <div class="header-actions">
+      <div class="header-icon">?</div>
+      <div class="header-icon">🔔</div>
+      <div class="header-icon">👤</div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item" href="01-dashboard.html">Dashboard</a></li>
+          <li><a class="sidebar-nav-item active" href="02-agents-list.html">Agents</a></li>
+          <li><a class="sidebar-nav-item" href="06-knowledge-pool.html">Knowledge</a></li>
+          <li><a class="sidebar-nav-item" href="07-connections.html">Connections</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Customer Support Bot</div>
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item nested" href="03-agent-overview.html">Overview</a></li>
+          <li><a class="sidebar-nav-item nested" href="04-agent-configure.html">Configure</a></li>
+          <li><a class="sidebar-nav-item nested active" href="05-agent-monitor.html">Monitor</a></li>
+          <li><a class="sidebar-nav-item nested" href="#">Changelog</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item" href="#">Organization Settings</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Agent Header -->
+      <div class="agent-header">
+        <div class="agent-avatar">CS</div>
+        <div class="agent-info">
+          <div class="agent-name">Customer Support Bot</div>
+          <div class="agent-meta">Monitor performance and review sessions</div>
+        </div>
+        <span class="badge badge-success">Published</span>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <a class="tab" href="03-agent-overview.html">Overview</a>
+        <a class="tab" href="04-agent-configure.html">Configure</a>
+        <div class="tab active">Monitor</div>
+        <div class="tab">Changelog</div>
+      </div>
+
+      <!-- Sub-tabs for Monitor -->
+      <div class="tabs" style="border-bottom: none; margin-bottom: 0;">
+        <div class="tab active" onclick="showMonitorSection('analytics')">Analytics</div>
+        <div class="tab" onclick="showMonitorSection('sessions')">Sessions</div>
+      </div>
+
+      <!-- Analytics Section -->
+      <div id="monitor-analytics" class="section-content active">
+        <!-- Time Range Selector -->
+        <div class="filter-bar">
+          <select style="width: auto;">
+            <option>Last 7 days</option>
+            <option>Last 30 days</option>
+            <option>Last 90 days</option>
+            <option>Custom range</option>
+          </select>
+          <button class="btn btn-secondary" style="margin-left: auto;">Export Report</button>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-4" style="margin-bottom: 24px;">
+          <div class="stat-card">
+            <div class="stat-label">Total Sessions</div>
+            <div class="stat-value">5,234</div>
+            <div class="stat-change positive">↑ 12% vs previous period</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Messages</div>
+            <div class="stat-value">18,921</div>
+            <div class="stat-change positive">↑ 8%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Success Rate</div>
+            <div class="stat-value">94.2%</div>
+            <div class="stat-change positive">↑ 2.1%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Avg Response Time</div>
+            <div class="stat-value">1.2s</div>
+            <div class="stat-change positive">↓ 0.3s faster</div>
+          </div>
+        </div>
+
+        <div class="grid grid-2">
+          <!-- Sessions Over Time Chart -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 16px;">Sessions Over Time</h3>
+            <div class="chart-placeholder">
+              [Line Chart: Daily sessions for the selected period]
+            </div>
+          </div>
+
+          <!-- Message Volume Chart -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 16px;">Message Volume</h3>
+            <div class="chart-placeholder">
+              [Bar Chart: Messages per day]
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-2" style="margin-top: 8px;">
+          <!-- Success/Failure Breakdown -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 16px;">Resolution Status</h3>
+            <div class="chart-placeholder" style="height: 150px;">
+              [Donut Chart: Resolved vs Escalated vs Failed]
+            </div>
+            <div style="display: flex; justify-content: space-around; margin-top: 16px; font-size: 14px;">
+              <div style="text-align: center;">
+                <div style="font-size: 20px; font-weight: 600; color: var(--success-color);">78%</div>
+                <div style="color: var(--text-secondary);">Resolved</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 20px; font-weight: 600; color: var(--warning-color);">16%</div>
+                <div style="color: var(--text-secondary);">Escalated</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 20px; font-weight: 600; color: var(--danger-color);">6%</div>
+                <div style="color: var(--text-secondary);">Failed</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Response Time Distribution -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 16px;">Response Time Distribution</h3>
+            <div class="chart-placeholder" style="height: 150px;">
+              [Histogram: Response time buckets]
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 16px; font-size: 13px; color: var(--text-secondary);">
+              <span>P50: 0.8s</span>
+              <span>P90: 1.8s</span>
+              <span>P99: 3.2s</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-2" style="margin-top: 8px;">
+          <!-- Token Usage -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 16px;">Token Usage</h3>
+            <div style="font-size: 14px;">
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span>Input Tokens</span>
+                <span style="font-weight: 500;">2,456,789</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span>Output Tokens</span>
+                <span style="font-weight: 500;">1,234,567</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span>Total Tokens</span>
+                <span style="font-weight: 500;">3,691,356</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                <span>Estimated Cost</span>
+                <span style="font-weight: 500;">$147.65</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Actions Used -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 16px;">Top Capabilities Used</h3>
+            <div style="font-size: 14px;">
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span>Search Knowledge Base</span>
+                <span style="font-weight: 500;">4,521 calls</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span>Lookup Customer Account</span>
+                <span style="font-weight: 500;">3,891 calls</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span>Create Salesforce Ticket</span>
+                <span style="font-weight: 500;">1,234 calls</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                <span>Escalate to Human Agent</span>
+                <span style="font-weight: 500;">837 calls</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sessions Section -->
+      <div id="monitor-sessions" class="section-content" style="display: none;">
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <input type="text" placeholder="Search by user, message content...">
+          <select>
+            <option>All Sessions</option>
+            <option>Resolved</option>
+            <option>Escalated</option>
+            <option>Failed</option>
+          </select>
+          <select>
+            <option>Last 7 days</option>
+            <option>Last 30 days</option>
+            <option>Today</option>
+          </select>
+          <button class="btn btn-secondary" style="margin-left: auto;">Export</button>
+        </div>
+
+        <!-- Sessions List -->
+        <div class="card" style="padding: 0;">
+          <div class="session-item">
+            <div class="session-status success"></div>
+            <div style="flex: 1;">
+              <div style="font-weight: 500;">Password Reset Assistance</div>
+              <div style="font-size: 13px; color: var(--text-secondary);">User: john.doe@example.com • 8 messages • Resolved</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 13px; color: var(--text-secondary);">2 hours ago</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Duration: 4m 23s</div>
+            </div>
+          </div>
+          <div class="session-item">
+            <div class="session-status success"></div>
+            <div style="flex: 1;">
+              <div style="font-weight: 500;">Product Inquiry</div>
+              <div style="font-size: 13px; color: var(--text-secondary);">User: jane.smith@company.com • 5 messages • Resolved</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 13px; color: var(--text-secondary);">3 hours ago</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Duration: 2m 15s</div>
+            </div>
+          </div>
+          <div class="session-item">
+            <div class="session-status warning"></div>
+            <div style="flex: 1;">
+              <div style="font-weight: 500;">Billing Dispute</div>
+              <div style="font-size: 13px; color: var(--text-secondary);">User: mike.wilson@email.com • 12 messages • Escalated</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 13px; color: var(--text-secondary);">4 hours ago</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Duration: 8m 45s</div>
+            </div>
+          </div>
+          <div class="session-item">
+            <div class="session-status success"></div>
+            <div style="flex: 1;">
+              <div style="font-weight: 500;">Account Settings Help</div>
+              <div style="font-size: 13px; color: var(--text-secondary);">User: anonymous • 3 messages • Resolved</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 13px; color: var(--text-secondary);">5 hours ago</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Duration: 1m 30s</div>
+            </div>
+          </div>
+          <div class="session-item">
+            <div class="session-status error"></div>
+            <div style="flex: 1;">
+              <div style="font-weight: 500;">Technical Issue Report</div>
+              <div style="font-size: 13px; color: var(--text-secondary);">User: tech.user@corp.com • 6 messages • Failed (timeout)</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 13px; color: var(--text-secondary);">6 hours ago</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Duration: 5m 00s</div>
+            </div>
+          </div>
+          <div class="session-item">
+            <div class="session-status success"></div>
+            <div style="flex: 1;">
+              <div style="font-weight: 500;">Feature Question</div>
+              <div style="font-size: 13px; color: var(--text-secondary);">User: new.customer@mail.com • 4 messages • Resolved</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 13px; color: var(--text-secondary);">7 hours ago</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Duration: 2m 45s</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 14px; color: var(--text-secondary);">
+          <span>Showing 1-6 of 5,234 sessions</span>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" style="padding: 6px 12px;" disabled>Previous</button>
+            <button class="btn btn-secondary" style="padding: 6px 12px;">Next</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function showMonitorSection(section) {
+      // Hide all sections
+      document.getElementById('monitor-analytics').style.display = 'none';
+      document.getElementById('monitor-sessions').style.display = 'none';
+      
+      // Show selected section
+      document.getElementById('monitor-' + section).style.display = 'block';
+      
+      // Update tab active state
+      document.querySelectorAll('.tabs:last-of-type .tab').forEach((tab, index) => {
+        tab.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>

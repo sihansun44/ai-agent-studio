@@ -1,0 +1,500 @@
+# Webex AI Agent Studio - Design System Rules
+
+## Overview
+
+This document defines the design system for the Webex AI Agent Studio prototype. Use these guidelines when integrating Figma designs or making UI changes.
+
+---
+
+## 1. Token Definitions
+
+### Color Tokens
+
+Design tokens are defined as CSS custom properties in `:root`:
+
+```css
+:root {
+  /* Backgrounds */
+  --bg-primary: #f5f7fa;      /* Main background */
+  --bg-secondary: #ffffff;    /* Card/surface background */
+  --bg-sidebar: #1a1a2e;      /* Dark sidebar background */
+
+  /* Text Colors */
+  --text-primary: #1a1a2e;    /* Primary text */
+  --text-secondary: #64748b;  /* Secondary/muted text */
+  --text-muted: #94a3b8;      /* Disabled/hint text */
+
+  /* UI Colors */
+  --border-color: #e2e8f0;    /* Borders and dividers */
+  --accent-color: #0066cc;    /* Primary action color (Webex blue) */
+  --accent-hover: #0052a3;    /* Hover state for accent */
+
+  /* Semantic Colors */
+  --success-color: #10b981;   /* Success states */
+  --warning-color: #f59e0b;   /* Warning states */
+  --danger-color: #ef4444;    /* Error/danger states */
+}
+```
+
+### Gradient Tokens
+
+Used for agent avatars and decorative elements:
+
+```css
+/* Primary gradient (purple) */
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+/* Success gradient (green) */
+background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+
+/* Info gradient (blue) */
+background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+
+/* Accent gradient (pink) */
+background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+
+/* Warm gradient (orange-yellow) */
+background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+```
+
+### Typography
+
+```css
+/* Font Family */
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+
+/* Font Sizes */
+--font-xs: 11px;     /* Labels, captions */
+--font-sm: 12px;     /* Small text, badges */
+--font-base: 14px;   /* Body text (default) */
+--font-md: 16px;     /* Card titles */
+--font-lg: 18px;     /* Section headers */
+--font-xl: 24px;     /* Page titles */
+--font-2xl: 28px;    /* Large stat values */
+
+/* Line Height */
+line-height: 1.5;
+```
+
+### Spacing Scale
+
+```css
+/* Spacing values used throughout */
+4px   /* Tight spacing */
+8px   /* Element gaps */
+12px  /* Component padding */
+16px  /* Card padding, section gaps */
+20px  /* Larger padding */
+24px  /* Page padding, major sections */
+32px  /* Large gaps */
+```
+
+### Border Radius
+
+```css
+4px   /* Small elements (badges, inputs) */
+6px   /* Buttons, small cards */
+8px   /* Cards, containers */
+12px  /* Large cards, modals */
+50%   /* Circular elements (avatars) */
+```
+
+---
+
+## 2. Component Library
+
+### Location
+All components are defined inline in:
+- **Prototype**: `/ia-deliverables/prototype/index.html`
+- **Wireframes**: `/ia-deliverables/wireframes/wireframe-styles.css`
+
+### Core Components
+
+#### Buttons
+
+```css
+.btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: var(--accent-color);
+  color: white;
+}
+
+.btn-secondary {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+```
+
+#### Cards
+
+```css
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+}
+```
+
+#### Badges
+
+```css
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-success { background: #dcfce7; color: #166534; }
+.badge-warning { background: #fef3c7; color: #92400e; }
+.badge-danger  { background: #fee2e2; color: #dc2626; }
+```
+
+#### Toggle Switches
+
+```css
+.capability-toggle {
+  width: 44px;
+  height: 24px;
+}
+
+.toggle-slider {
+  background-color: #cbd5e1;  /* Off state */
+  border-radius: 24px;
+}
+
+input:checked + .toggle-slider {
+  background-color: var(--accent-color);  /* On state */
+}
+```
+
+#### Segment Control (Pills)
+
+```css
+.segment-control {
+  display: inline-flex;
+  background: var(--bg-primary);
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.segment-item {
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.segment-item.active {
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+```
+
+#### Tables
+
+```css
+.table-container {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+table th {
+  background: var(--bg-primary);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+table td {
+  padding: 14px 20px;
+}
+```
+
+#### Tabs
+
+```css
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 16px;
+}
+
+.tab {
+  padding: 14px 20px;
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+}
+
+.tab.active {
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+  font-weight: 500;
+}
+```
+
+#### Form Inputs
+
+```css
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.form-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+```
+
+---
+
+## 3. Layout Structure
+
+### App Layout
+
+```
+┌──────────────────────────────────────────────────────┐
+│  Header (56px fixed)                                 │
+├────────────┬─────────────────────────────────────────┤
+│            │                                         │
+│  Sidebar   │  Main Content Area                      │
+│  (220px)   │  (padding: 24px)                        │
+│  fixed     │                                         │
+│            │                                         │
+└────────────┴─────────────────────────────────────────┘
+```
+
+### Grid System
+
+```css
+.grid { display: grid; gap: 16px; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+```
+
+---
+
+## 4. Icon System
+
+### Implementation
+Icons are implemented as inline SVGs for flexibility and styling:
+
+```html
+<!-- Example: Help icon -->
+<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10..."/>
+</svg>
+```
+
+### Icon Sizing
+
+```css
+/* Small icons (buttons, badges) */
+width: 16px; height: 16px;
+
+/* Default icons (navigation, actions) */
+width: 18px; height: 18px;
+
+/* Medium icons (cards, features) */
+width: 20px; height: 20px;
+
+/* Large icons (empty states, features) */
+width: 24px - 48px;
+```
+
+### Common Icons Used
+- Navigation: Dashboard, Agents, Knowledge, Connections, Settings
+- Actions: Add, Edit, Delete, Configure, Close
+- Status: Checkmark, Warning, Error, Info
+- UI: Search, Bell (notifications), Help, Chevron
+
+---
+
+## 5. Page Patterns
+
+### Page Header
+
+```html
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Page Title</h1>
+    <p class="page-subtitle">Description text</p>
+  </div>
+  <button class="btn btn-primary">+ Primary Action</button>
+</div>
+```
+
+### Agent Page Header
+
+```html
+<div class="agent-header">
+  <div class="agent-avatar" style="background: [gradient]">CS</div>
+  <div class="agent-info">
+    <div class="agent-name">Agent Name</div>
+    <div class="agent-meta">Description • metadata</div>
+  </div>
+  <span class="badge badge-success">Status</span>
+  <button class="btn btn-primary">Action</button>
+</div>
+```
+
+### Filter Bar
+
+```html
+<div class="filter-bar">
+  <input type="text" placeholder="Search...">
+  <select><!-- Filter options --></select>
+  <button class="btn btn-primary" style="margin-left: auto;">Action</button>
+</div>
+```
+
+---
+
+## 6. State Patterns
+
+### Agent Status States
+
+| Status | Badge Class | Button |
+|--------|-------------|--------|
+| Published | `badge-success` | "Unpublish" (secondary) |
+| Ready to Publish | `badge-warning` | "Publish" (primary) |
+| In Development | `badge-warning` | "Publish" (primary) |
+
+### Interactive States
+
+```css
+/* Hover */
+:hover { background: var(--bg-primary); }
+
+/* Active/Selected */
+.active { 
+  color: var(--accent-color);
+  background: rgba(0, 102, 204, 0.1);
+}
+
+/* Disabled */
+:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+```
+
+---
+
+## 7. Modal Pattern
+
+```css
+.modal-overlay {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  width: 640px;
+  max-height: 90vh;
+}
+
+.modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border-color); }
+.modal-body { padding: 24px; max-height: 60vh; overflow-y: auto; }
+.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border-color); }
+```
+
+---
+
+## 8. Animation Tokens
+
+```css
+/* Standard transition */
+transition: all 0.15s ease;
+
+/* Modal entrance */
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Toast slide in */
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Pulse (for syncing indicators) */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+```
+
+---
+
+## 9. Figma Integration Guidelines
+
+When implementing designs from Figma:
+
+1. **Match tokens exactly** - Use the CSS variables defined above
+2. **Use semantic colors** - Map Figma colors to our semantic tokens
+3. **Maintain component patterns** - Follow the component structures defined here
+4. **Preserve spacing** - Use the spacing scale (4, 8, 12, 16, 20, 24px)
+5. **Icons as inline SVGs** - Convert Figma icons to inline SVG format
+6. **Border radius consistency** - Use 4/6/8/12px based on component size
+
+---
+
+## 10. File Structure
+
+```
+/ia-deliverables/
+├── prototype/
+│   └── index.html          # Main interactive prototype (all-in-one)
+├── wireframes/
+│   ├── wireframe-styles.css # Shared wireframe styles
+│   └── *.html               # Individual wireframe pages
+├── validation/
+│   ├── user-personas.md
+│   └── workflow-validation.md
+└── README.md
+```
+
+---
+
+## Quick Reference
+
+| Element | Key Property |
+|---------|--------------|
+| Primary color | `#0066cc` |
+| Background | `#f5f7fa` |
+| Card background | `#ffffff` |
+| Sidebar | `#1a1a2e` |
+| Border | `#e2e8f0` |
+| Border radius (cards) | `12px` |
+| Border radius (buttons) | `8px` |
+| Button padding | `8px 16px` |
+| Card padding | `20px` |
+| Page padding | `24px` |
+| Sidebar width | `220px` |
+| Header height | `56px` |

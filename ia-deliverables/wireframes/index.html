@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wireframes Index - Webex AI Agent Studio</title>
+  <link rel="stylesheet" href="wireframe-styles.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    .index-container {
+      max-width: 900px;
+      width: 100%;
+    }
+    .index-header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+    .index-header h1 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .index-header p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    .wireframe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .wireframe-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: block;
+    }
+    .wireframe-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    }
+    .wireframe-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+    .wireframe-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .wireframe-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+    .section-title {
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 32px 0 16px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="index-container">
+    <div class="index-header">
+      <h1>Webex AI Agent Studio</h1>
+      <p>Information Architecture Wireframes</p>
+    </div>
+
+    <div class="section-title">Global Pages</div>
+    <div class="wireframe-grid">
+      <a href="01-dashboard.html" class="wireframe-card">
+        <div class="wireframe-card-icon">📊</div>
+        <h3>Dashboard</h3>
+        <p>Overview of all agents, knowledge sync, and connection health</p>
+      </a>
+      <a href="02-agents-list.html" class="wireframe-card">
+        <div class="wireframe-card-icon">🤖</div>
+        <h3>Agents List</h3>
+        <p>Browse and manage all AI agents with filtering by status</p>
+      </a>
+      <a href="06-knowledge-pool.html" class="wireframe-card">
+        <div class="wireframe-card-icon">📚</div>
+        <h3>Knowledge Pool</h3>
+        <p>Organization-wide knowledge sources and collections</p>
+      </a>
+      <a href="07-connections.html" class="wireframe-card">
+        <div class="wireframe-card-icon">🔗</div>
+        <h3>Connections</h3>
+        <p>Third-party service integrations (Salesforce, ServiceNow, etc.)</p>
+      </a>
+    </div>
+
+    <div class="section-title">Agent Pages</div>
+    <div class="wireframe-grid">
+      <a href="03-agent-overview.html" class="wireframe-card">
+        <div class="wireframe-card-icon">👁️</div>
+        <h3>Agent Overview</h3>
+        <p>Quick stats, deployments (read-only), and publish actions</p>
+      </a>
+      <a href="04-agent-configure.html" class="wireframe-card">
+        <div class="wireframe-card-icon">⚙️</div>
+        <h3>Agent Configure</h3>
+        <p>General, Prompt, Knowledge, Capabilities, Connections, Testing</p>
+      </a>
+      <a href="05-agent-monitor.html" class="wireframe-card">
+        <div class="wireframe-card-icon">📈</div>
+        <h3>Agent Monitor</h3>
+        <p>Analytics dashboard and session browser</p>
+      </a>
+    </div>
+
+    <div style="text-align: center; margin-top: 48px; color: white; opacity: 0.7; font-size: 14px;">
+      <p>IA Deliverables for Webex AI Agent Studio</p>
+      <p>See also: <a href="../validation/user-personas.md" style="color: white;">User Personas</a> | <a href="../validation/workflow-validation.md" style="color: white;">Workflow Validation</a></p>
+    </div>
+  </div>
+</body>
+</html>

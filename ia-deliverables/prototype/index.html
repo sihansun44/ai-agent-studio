@@ -1,0 +1,4389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webex AI Agent Studio - Interactive Prototype</title>
+  <style>
+    /* Import Inter font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+      /* Figma Dark Theme Tokens */
+      --bg-primary: #000000;
+      --bg-secondary: #121212;
+      --bg-sidebar: #000000;
+      --bg-glass: rgba(255,255,255,0.05);
+      --bg-glass-light: rgba(0,0,0,0.4);
+      --bg-card: rgba(255,255,255,0.05);
+      --text-primary: rgba(255,255,255,0.95);
+      --text-secondary: rgba(255,255,255,0.70);
+      --text-muted: rgba(255,255,255,0.50);
+      --border-color: rgba(255,255,255,0.12);
+      --outline-color: rgba(255,255,255,0.50);
+      --accent-color: #64b4fa;
+      --accent-bg: #1170cf;
+      --accent-hover: #4da3f0;
+      --success-color: #36d399;
+      --success-bg: rgba(54,211,153,0.15);
+      --warning-color: #fbbd23;
+      --warning-bg: rgba(251,189,35,0.15);
+      --danger-color: #fc8b98;
+      --danger-bg: rgba(252,139,152,0.15);
+      --button-secondary-bg: transparent;
+      --button-secondary-active: rgba(255,255,255,0.20);
+      --gradient-divider: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 22%, rgba(255,255,255,0.2) 78%, rgba(255,255,255,0) 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.43;
+      color: var(--text-primary);
+      background: #000000;
+      min-height: 100vh;
+    }
+
+    /* Figma Gradient Background - Using exact image */
+    .gradient-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: #000000;
+      background-image: url('bg-gradient.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    /* Layout */
+    .app {
+      display: flex;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header - Figma Exact Style */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: transparent;
+      border-bottom: none;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 16px;
+      z-index: 100;
+      box-sizing: border-box;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-btn-primary {
+      width: 32px;
+      height: 32px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.95);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      transition: background 0.15s;
+    }
+
+    .header-btn-primary:hover {
+      background: rgba(255, 255, 255, 1);
+    }
+
+    .header-btn-primary svg {
+      fill: #000000;
+    }
+
+    .header-wordmark {
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+    }
+
+    .webex-text {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 22%, rgba(255,255,255,0.2) 78%, rgba(255,255,255,0) 100%);
+    }
+
+    .header-app-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .header-spacer {
+      flex: 1;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-btn-ai {
+      width: 32px;
+      height: 32px;
+      border-radius: 100px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .header-btn-ai:hover {
+      background: var(--button-secondary-active);
+    }
+
+    .header-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 100px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .header-btn svg {
+      fill: var(--text-primary);
+    }
+
+    .header-btn:hover {
+      background: var(--button-secondary-active);
+    }
+
+    .header-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .header-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #545454;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    /* Sidebar - Figma Style - Transparent */
+    .sidebar {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      bottom: 0;
+      width: 240px;
+      background: transparent;
+      padding: 16px 0;
+      overflow-y: auto;
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-main {
+      flex: 1;
+    }
+
+    .sidebar-bottom {
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+
+    .nav-section {
+      margin-bottom: 4px;
+    }
+
+    .nav-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-primary);
+      padding: 16px 24px 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 8px 4px 0;
+      padding: 10px 12px 10px 24px;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border-radius: 0 24px 24px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: relative;
+    }
+
+    .nav-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 24px;
+      background: white;
+      border-radius: 0 4px 4px 0;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-item.active::before {
+      opacity: 1;
+    }
+
+    .nav-item-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-item-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .header-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-primary);
+    }
+
+    .info-banner-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--accent-color);
+    }
+
+    .nav-item.nested {
+      padding-left: 48px;
+      font-size: 13px;
+    }
+
+    /* Agent shortcut in sidebar */
+    .agent-shortcut {
+      display: flex;
+      align-items: center;
+      margin: 0 8px 4px 0;
+      padding: 10px 12px 10px 24px;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.15s;
+      border-radius: 0 24px 24px 0;
+      position: relative;
+    }
+
+    .agent-shortcut::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 24px;
+      background: white;
+      border-radius: 0 4px 4px 0;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .agent-shortcut:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .agent-shortcut.active {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .agent-shortcut.active::before {
+      opacity: 1;
+    }
+
+    .agent-shortcut-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin-right: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: white;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .agent-shortcut-name {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-right: 4px;
+    }
+
+    .nav-close-btn {
+      width: 20px;
+      height: 20px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      opacity: 0;
+      transition: opacity 0.15s, background 0.15s;
+      flex-shrink: 0;
+    }
+
+    /* Segmented Control / Pills for sub-navigation - Figma Style */
+    .segment-control {
+      display: inline-flex;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 24px;
+    }
+
+    .segment-item {
+      padding: 6px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .segment-item:hover {
+      color: var(--text-primary);
+      background: var(--button-secondary-active);
+    }
+
+    .segment-item.active {
+      background: var(--button-secondary-active);
+      color: var(--text-primary);
+    }
+
+    .nav-close-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--text-muted);
+    }
+
+    .agent-shortcut:hover .nav-close-btn {
+      opacity: 1;
+    }
+
+    .nav-close-btn:hover {
+      background: var(--button-secondary-active);
+    }
+
+    .nav-close-btn:hover svg {
+      fill: var(--text-primary);
+    }
+
+    .nav-divider {
+      height: 1px;
+      margin: 12px 16px;
+      background: var(--gradient-divider);
+    }
+
+    /* Main Content - Figma Style */
+    .main {
+      margin-left: 240px;
+      margin-top: 56px;
+      padding: 12px 24px 24px 24px;
+      flex: 1;
+      min-height: calc(100vh - 56px);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Page Content Area - Contains agent header + secondary content */
+    .page-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 24px;
+    }
+
+    /* Agent Header Section - No card (transparent) */
+    .agent-header-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    /* Primary Content Card - Layer 1 (outer dark card) */
+    .primary-content {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    /* Page header inside primary content */
+    .primary-content .page-header {
+      margin-bottom: 16px;
+    }
+
+    /* Secondary Content - Glass Card from Figma - Layer 2 (inner card) */
+    .secondary-content {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    /* Inner content area inside secondary content */
+    .content-area {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Page Header */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 32px;
+      color: var(--text-primary);
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Buttons - Figma Pill Style */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      border-color: transparent;
+    }
+
+    .btn-primary:hover {
+      background: rgba(255,255,255,0.85);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--outline-color);
+    }
+
+    .btn-secondary:hover {
+      background: var(--button-secondary-active);
+    }
+
+    .btn-sm {
+      padding: 6px 16px;
+      font-size: 13px;
+    }
+
+    /* Cards */
+    /* Cards - Figma Glass Style */
+    .card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    /* Cards inside secondary-content are transparent (already in glass container) */
+    .secondary-content .card {
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin-bottom: 0;
+    }
+
+    /* Form inputs inside secondary-content - Match Figma dark theme */
+    .secondary-content input[type="text"],
+    .secondary-content input[type="email"],
+    .secondary-content input[type="url"],
+    .secondary-content select,
+    .secondary-content textarea {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      color: var(--text-primary);
+      padding: 12px 14px;
+      width: 100%;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .secondary-content input[type="text"]:focus,
+    .secondary-content input[type="email"]:focus,
+    .secondary-content input[type="url"]:focus,
+    .secondary-content select:focus,
+    .secondary-content textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(100, 180, 250, 0.2);
+    }
+
+    .secondary-content select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='rgba(255,255,255,0.7)' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+    }
+
+    /* Stat cards inside secondary-content keep subtle styling */
+    .secondary-content .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Grid inside secondary-content */
+    .secondary-content .grid {
+      gap: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+    /* Stats */
+    /* Stat Cards - Figma Style */
+    .stat-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .stat-change {
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .stat-change.positive { color: var(--success-color); }
+    .stat-change.negative { color: var(--danger-color); }
+
+    /* Badges */
+    /* Badges - Figma Style */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--outline-color);
+      background: var(--bg-glass);
+    }
+
+    .badge-success { 
+      background: var(--success-bg); 
+      color: var(--success-color); 
+      border-color: var(--success-color);
+    }
+    .badge-warning { 
+      background: var(--warning-bg); 
+      color: var(--warning-color); 
+      border-color: var(--warning-color);
+    }
+    .badge-info { 
+      background: rgba(100,180,250,0.15); 
+      color: var(--accent-color); 
+      border-color: var(--accent-color);
+    }
+
+    /* Tables */
+    .table-container {
+      overflow: hidden;
+    }
+
+    /* Tables - Figma Style */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background: transparent;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+    }
+
+    tr:last-child td { border-bottom: none; }
+    
+    tbody tr {
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    
+    tbody tr:hover { background: var(--button-secondary-active); }
+
+    /* Agent Header */
+    /* Agent Header - Figma Style */
+    .agent-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .agent-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: 700;
+      margin-right: 16px;
+    }
+
+    .agent-info { flex: 1; }
+
+    .agent-name-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .agent-name {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .agent-meta {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* Tabs */
+    /* Tabs - Figma Style */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .tabs + .segment-control {
+      margin-top: -4px;
+    }
+
+    .tab {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.15s;
+      background: transparent;
+    }
+
+    .tab:hover {
+      color: var(--text-primary);
+      background: var(--button-secondary-active);
+    }
+
+    .tab.active {
+      color: var(--text-primary);
+      background: var(--button-secondary-active);
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-bar input,
+    .filter-bar select {
+      padding: 10px 14px;
+      border: 1px solid var(--outline-color);
+      border-radius: 8px;
+      font-size: 14px;
+      background: transparent;
+      color: var(--text-primary);
+      height: 40px;
+      box-sizing: border-box;
+    }
+
+    .filter-bar select option {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    .filter-bar input[type="text"],
+    .filter-bar input[placeholder*="Search"] {
+      width: 280px;
+      max-width: 280px;
+      flex-shrink: 0;
+    }
+
+    .filter-bar select {
+      width: 160px;
+      max-width: 160px;
+      flex-shrink: 0;
+    }
+
+    /* Deployment Widget */
+    .deployment-widget {
+      background: var(--bg-glass);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .deployment-section {
+      margin-bottom: 16px;
+    }
+
+    .deployment-section:last-child { margin-bottom: 0; }
+
+    .deployment-section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .deployment-section-title .deployment-link {
+      text-transform: none;
+      font-weight: 400;
+      letter-spacing: normal;
+    }
+
+    .deployment-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 13px;
+    }
+
+    .deployment-link {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .deployment-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Info Banner */
+    /* Info Banner - Figma Style */
+    .info-banner {
+      background: rgba(100,180,250,0.1);
+      border: 1px solid var(--accent-color);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .info-banner-icon {
+      font-size: 20px;
+    }
+
+    .info-banner-content {
+      flex: 1;
+    }
+
+    .info-banner-title {
+      font-weight: 500;
+    }
+
+    .info-banner-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* Pages */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* Capability Item */
+    .capability-item {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .capability-item:last-child { border-bottom: none; }
+
+    /* Toggle - Figma Style */
+    .capability-toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      margin-right: 14px;
+      flex-shrink: 0;
+    }
+
+    .capability-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .capability-toggle .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255,255,255,0.2);
+      transition: 0.2s;
+      border-radius: 24px;
+      border: 1px solid var(--outline-color);
+    }
+
+    .capability-toggle .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 2px;
+      bottom: 2px;
+      background-color: var(--text-primary);
+      transition: 0.2s;
+      border-radius: 50%;
+    }
+
+    .capability-toggle input:checked + .toggle-slider {
+      background-color: var(--accent-bg);
+      border-color: var(--accent-bg);
+    }
+
+    .capability-toggle input:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+
+    .capability-name {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .capability-type {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      margin-right: 14px;
+    }
+
+    .capability-action {
+      color: var(--accent-color);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* View Switcher */
+    /* View Switcher - Figma Style */
+    .view-switcher {
+      display: flex;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 4px;
+      margin-left: auto;
+    }
+
+    .view-switcher-btn {
+      width: 32px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .view-switcher-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--text-secondary);
+    }
+
+    .view-switcher-btn:hover {
+      background: rgba(0,0,0,0.05);
+    }
+
+    .view-switcher-btn.active {
+      background: var(--button-secondary-active);
+    }
+
+    .view-switcher-btn.active svg {
+      fill: var(--accent-color);
+    }
+
+    /* Agent Cards Grid */
+    .agents-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      display: none;
+    }
+
+    .agents-card-grid.active {
+      display: grid;
+    }
+
+    /* Agent Cards - Figma Style */
+    .agent-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .agent-card:hover {
+      border-color: var(--accent-color);
+      box-shadow: 0 4px 20px rgba(100,180,250,0.15);
+      transform: translateY(-2px);
+    }
+
+    .agent-card-header {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .agent-card-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 600;
+      color: white;
+      margin-right: 14px;
+      flex-shrink: 0;
+    }
+
+    .agent-card-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .agent-card-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .agent-card-description {
+      font-size: 13px;
+      color: var(--text-secondary);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .agent-card-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .agent-card-stat {
+      text-align: center;
+    }
+
+    .agent-card-stat-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .agent-card-stat-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .agent-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Modal Wizard */
+    /* Modal - Figma Style */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      width: 640px;
+      max-height: 90vh;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      animation: modalIn 0.25s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .modal-close:hover {
+      background: var(--button-secondary-active);
+    }
+
+    .modal-close svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-secondary);
+    }
+
+    .modal-body {
+      padding: 24px;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Wizard Steps */
+    /* Wizard Progress - Figma Style */
+    .wizard-progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px 24px;
+      gap: 8px;
+    }
+
+    .wizard-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .wizard-step-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .wizard-step.active .wizard-step-number {
+      background: var(--accent-bg);
+      border-color: var(--accent-bg);
+      color: white;
+    }
+
+    .wizard-step.completed .wizard-step-number {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .wizard-step-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .wizard-step.active .wizard-step-label {
+      color: var(--text-primary);
+    }
+
+    .wizard-step-line {
+      width: 40px;
+      height: 2px;
+      background: var(--border-color);
+    }
+
+    .wizard-step-line.completed {
+      background: var(--success-color);
+    }
+
+    /* Wizard Content */
+    .wizard-panel {
+      display: none;
+    }
+
+    .wizard-panel.active {
+      display: block;
+    }
+
+    /* Agent Type Cards */
+    .agent-type-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Agent Type Cards - Figma Style */
+    .agent-type-card {
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--bg-glass);
+    }
+
+    .agent-type-card:hover {
+      border-color: var(--accent-color);
+      background: rgba(100,180,250,0.1);
+    }
+
+    .agent-type-card.selected {
+      border-color: var(--accent-color);
+      background: rgba(100,180,250,0.15);
+    }
+
+    .agent-type-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .agent-type-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .agent-type-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .agent-type-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .agent-type-features {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .agent-type-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .agent-type-feature:last-child {
+      margin-bottom: 0;
+    }
+
+    .agent-type-feature svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--success-color);
+      flex-shrink: 0;
+    }
+
+    /* Form Elements in Wizard */
+    /* Form Elements - Figma Style */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .form-label .required {
+      color: var(--danger-color);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--outline-color);
+      border-radius: 8px;
+      font-size: 14px;
+      background: transparent;
+      color: var(--text-primary);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(100, 180, 250, 0.15);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    textarea.form-input {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Avatar Selector */
+    .avatar-selector {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .avatar-preview {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .avatar-colors {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .avatar-color {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .avatar-color:hover {
+      transform: scale(1.1);
+    }
+
+    .avatar-color.selected {
+      border-color: var(--text-primary);
+      box-shadow: 0 0 0 2px white, 0 0 0 4px var(--text-primary);
+    }
+
+    /* Knowledge Base Selector */
+    /* KB Options - Figma Style */
+    .kb-option {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--bg-glass);
+    }
+
+    .kb-option:hover {
+      border-color: var(--accent-color);
+      background: rgba(100,180,250,0.1);
+    }
+
+    .kb-option.selected {
+      border-color: var(--accent-color);
+      background: rgba(100, 180, 250, 0.15);
+    }
+
+    .kb-option input[type="checkbox"] {
+      margin-right: 12px;
+      width: 18px;
+      height: 18px;
+    }
+
+    .kb-option-info {
+      flex: 1;
+    }
+
+    .kb-option-name {
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .kb-option-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Summary Section */
+    /* Summary Section - Figma Style */
+    .summary-section {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .summary-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .summary-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .summary-label {
+      color: var(--text-secondary);
+    }
+
+    .summary-value {
+      font-weight: 500;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--text-primary);
+      color: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      z-index: 1001;
+      animation: slideIn 0.3s ease;
+    }
+
+    .toast.show { display: flex; }
+
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Figma Gradient Background -->
+  <div class="gradient-bg"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <!-- Left Section -->
+    <div class="header-left">
+      <!-- Menu Button -->
+      <button class="header-btn-primary">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#000" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <!-- Webex Wordmark -->
+      <div class="header-wordmark">
+        <span class="webex-text">webex</span>
+      </div>
+    </div>
+    
+    <!-- Vertical Divider -->
+    <div class="header-divider"></div>
+    
+    <!-- App Label -->
+    <span class="header-app-label">AI Agent Studio</span>
+    
+    <!-- Spacer -->
+    <div class="header-spacer"></div>
+    
+    <!-- Right Section -->
+    <div class="header-right">
+      <!-- Cisco AI Symbol -->
+      <button class="header-btn-ai">
+        <svg viewBox="0 0 32 32" width="24" height="24">
+          <circle cx="16" cy="16" r="14" fill="none" stroke="#00bceb" stroke-width="2"/>
+          <circle cx="16" cy="12" r="4" fill="#00bceb"/>
+          <path d="M10 22c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke="#00bceb" stroke-width="2"/>
+        </svg>
+      </button>
+      
+      <!-- Message Icon -->
+      <button class="header-btn">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </button>
+      
+      <!-- Help Icon -->
+      <button class="header-btn">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/></svg>
+      </button>
+      
+      <!-- Notification Bell -->
+      <button class="header-btn">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+      </button>
+      
+      <!-- Waffle Menu -->
+      <button class="header-btn">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+      </button>
+      
+      <!-- Avatar -->
+      <div class="header-avatar">
+        <img src="https://i.pravatar.cc/32?img=8" alt="User" />
+      </div>
+    </div>
+  </header>
+
+  <div class="app">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-main">
+        <div class="nav-section">
+          <div class="nav-item active" data-page="dashboard">
+            <span class="nav-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            </span>
+            Dashboard
+          </div>
+          <div class="nav-item" data-page="agents">
+            <span class="nav-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M20 9V7c0-1.1-.9-2-2-2h-3c0-1.66-1.34-3-3-3S9 3.34 9 5H6c-1.1 0-2 .9-2 2v2c-1.66 0-3 1.34-3 3s1.34 3 3 3v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c1.66 0 3-1.34 3-3s-1.34-3-3-3zM7.5 11.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S9.83 13 9 13s-1.5-.67-1.5-1.5zM16 17H8v-2h8v2zm-1-4c-.83 0-1.5-.67-1.5-1.5S14.17 10 15 10s1.5.67 1.5 1.5S15.83 13 15 13z"/></svg>
+            </span>
+            Agents
+          </div>
+          <div class="nav-item" data-page="knowledge">
+            <span class="nav-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+            </span>
+            Knowledge
+          </div>
+          <div class="nav-item" data-page="connections">
+            <span class="nav-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+            </span>
+            Connections
+          </div>
+        </div>
+        <div class="nav-divider" id="agent-menu-divider" style="display: none;"></div>
+        <div id="agent-menu-container">
+          <!-- Agent shortcuts will be rendered here dynamically -->
+        </div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="nav-item" data-page="settings" title="Organization Settings">
+          <span class="nav-item-icon">
+            <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+          </span>
+          Settings
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Dashboard Page -->
+      <div id="page-dashboard" class="page active">
+        <!-- Layer 1: Primary Content Card -->
+        <div class="primary-content">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Dashboard</h1>
+              <p class="page-subtitle">Overview of your AI agents and resources</p>
+            </div>
+            <button class="btn btn-primary" onclick="openCreateAgentModal()">+ Create Agent</button>
+          </div>
+
+          <!-- Layer 2: Secondary Content Card -->
+          <div class="secondary-content">
+            <div class="grid grid-4" style="margin-bottom: 24px;">
+          <div class="stat-card">
+            <div class="stat-label">Total Agents</div>
+            <div class="stat-value">12</div>
+            <div class="stat-change positive">↑ 2 this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Published</div>
+            <div class="stat-value">8</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Sessions (7d)</div>
+            <div class="stat-value">15,432</div>
+            <div class="stat-change positive">↑ 12%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Avg Success Rate</div>
+            <div class="stat-value">94.2%</div>
+            <div class="stat-change positive">↑ 2.1%</div>
+          </div>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Agents by Status</h3>
+              <button class="btn btn-secondary btn-sm" onclick="navigateTo('agents')">View All</button>
+            </div>
+            <table>
+              <thead>
+                <tr><th>Agent</th><th>Status</th><th>Sessions</th></tr>
+              </thead>
+              <tbody>
+                <tr onclick="selectAgent('cs')">
+                  <td><strong>Customer Support Bot</strong></td>
+                  <td><span class="badge badge-success">Published</span></td>
+                  <td>5,234</td>
+                </tr>
+                <tr onclick="selectAgent('sa')">
+                  <td><strong>Sales Assistant</strong></td>
+                  <td><span class="badge badge-success">Published</span></td>
+                  <td>3,891</td>
+                </tr>
+                <tr onclick="selectAgent('it')">
+                  <td><strong>IT Support Agent</strong></td>
+                  <td><span class="badge badge-warning">Ready to Publish</span></td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Recent Activity</h3>
+            </div>
+            <div style="font-size: 14px;">
+              <div style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                <div style="font-weight: 500;">IT Support Agent submitted for review</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">by marcus.dev • 2 hours ago</div>
+              </div>
+              <div style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                <div style="font-weight: 500;">Knowledge sync completed</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Product Documentation • 3 hours ago</div>
+              </div>
+              <div style="padding: 12px 0;">
+                <div style="font-weight: 500;">Customer Support Bot updated</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">by sarah.admin • 5 hours ago</div>
+              </div>
+            </div>
+          </div>
+          </div>
+          </div><!-- End Layer 2 -->
+        </div><!-- End Layer 1 -->
+      </div>
+
+      <!-- Agents Page -->
+      <div id="page-agents" class="page">
+        <!-- Layer 1: Primary Content Card -->
+        <div class="primary-content">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Agents</h1>
+              <p class="page-subtitle">Manage your AI agents</p>
+            </div>
+            <button class="btn btn-primary" onclick="openCreateAgentModal()">+ Create New Agent</button>
+          </div>
+
+          <!-- Layer 2: Secondary Content Card -->
+          <div class="secondary-content">
+            <div class="filter-bar">
+              <input type="text" placeholder="Search agents...">
+              <select>
+                <option>All Status (12)</option>
+                <option>Published (8)</option>
+                <option>Ready to Publish (2)</option>
+                <option>In Development (2)</option>
+              </select>
+              <select>
+                <option>Sort by: Last Modified</option>
+                <option>Sort by: Name</option>
+                <option>Sort by: Sessions</option>
+                <option>Sort by: Success Rate</option>
+              </select>
+              <div class="view-switcher" style="margin-left: auto;">
+                <button class="view-switcher-btn active" onclick="switchAgentView('list')" title="List view">
+                  <svg viewBox="0 0 24 24"><path d="M3 14h4v-4H3v4zm0 5h4v-4H3v4zM3 9h4V5H3v4zm5 5h13v-4H8v4zm0 5h13v-4H8v4zM8 5v4h13V5H8z"/></svg>
+                </button>
+                <button class="view-switcher-btn" onclick="switchAgentView('card')" title="Card view">
+                  <svg viewBox="0 0 24 24"><path d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- List View -->
+        <div class="table-container" id="agents-list-view">
+          <table>
+            <thead>
+              <tr><th>Agent</th><th>Status</th><th>Sessions (7d)</th><th>Success Rate</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              <tr onclick="selectAgent('cs')">
+                <td>
+                  <div style="display: flex; align-items: center;">
+                    <div style="width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, #667eea, #764ba2); margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">CS</div>
+                    <div>
+                      <div style="font-weight: 500;">Customer Support Bot</div>
+                      <div style="font-size: 12px; color: var(--text-secondary);">Handles customer inquiries</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-success">Published</span></td>
+                <td>5,234</td>
+                <td>94.2%</td>
+                <td><button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); selectAgent('cs'); navigateTo('agent-configure');">Configure</button></td>
+              </tr>
+              <tr onclick="selectAgent('sa')">
+                <td>
+                  <div style="display: flex; align-items: center;">
+                    <div style="width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, #11998e, #38ef7d); margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">SA</div>
+                    <div>
+                      <div style="font-weight: 500;">Sales Assistant</div>
+                      <div style="font-size: 12px; color: var(--text-secondary);">Lead qualification</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-success">Published</span></td>
+                <td>3,891</td>
+                <td>91.8%</td>
+                <td><button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); selectAgent('sa'); navigateTo('agent-configure');">Configure</button></td>
+              </tr>
+              <tr onclick="selectAgent('it')">
+                <td>
+                  <div style="display: flex; align-items: center;">
+                    <div style="width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, #4facfe, #00f2fe); margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">IT</div>
+                    <div>
+                      <div style="font-weight: 500;">IT Support Agent</div>
+                      <div style="font-size: 12px; color: var(--text-secondary);">Technical support</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-warning">Ready to Publish</span></td>
+                <td>—</td>
+                <td>—</td>
+                <td><button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); selectAgent('it'); navigateTo('agent-configure');">Review</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Card View -->
+        <div class="agents-card-grid" id="agents-card-view">
+          <div class="agent-card" onclick="selectAgent('cs')">
+            <div class="agent-card-header">
+              <div class="agent-card-avatar" style="background: linear-gradient(135deg, #667eea, #764ba2);">CS</div>
+              <div class="agent-card-info">
+                <div class="agent-card-name">Customer Support Bot</div>
+                <div class="agent-card-description">Handles customer inquiries and support requests across multiple channels</div>
+              </div>
+            </div>
+            <div class="agent-card-stats">
+              <div class="agent-card-stat">
+                <div class="agent-card-stat-value">5,234</div>
+                <div class="agent-card-stat-label">Sessions</div>
+              </div>
+              <div class="agent-card-stat">
+                <div class="agent-card-stat-value">94.2%</div>
+                <div class="agent-card-stat-label">Success Rate</div>
+              </div>
+            </div>
+            <div class="agent-card-footer">
+              <span class="badge badge-success">Published</span>
+              <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); selectAgent('cs'); navigateTo('agent-configure');">Configure</button>
+            </div>
+          </div>
+
+          <div class="agent-card" onclick="selectAgent('sa')">
+            <div class="agent-card-header">
+              <div class="agent-card-avatar" style="background: linear-gradient(135deg, #11998e, #38ef7d);">SA</div>
+              <div class="agent-card-info">
+                <div class="agent-card-name">Sales Assistant</div>
+                <div class="agent-card-description">Lead qualification and sales support for potential customers</div>
+              </div>
+            </div>
+            <div class="agent-card-stats">
+              <div class="agent-card-stat">
+                <div class="agent-card-stat-value">3,891</div>
+                <div class="agent-card-stat-label">Sessions</div>
+              </div>
+              <div class="agent-card-stat">
+                <div class="agent-card-stat-value">91.8%</div>
+                <div class="agent-card-stat-label">Success Rate</div>
+              </div>
+            </div>
+            <div class="agent-card-footer">
+              <span class="badge badge-success">Published</span>
+              <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); selectAgent('sa'); navigateTo('agent-configure');">Configure</button>
+            </div>
+          </div>
+
+          <div class="agent-card" onclick="selectAgent('it')">
+            <div class="agent-card-header">
+              <div class="agent-card-avatar" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">IT</div>
+              <div class="agent-card-info">
+                <div class="agent-card-name">IT Support Agent</div>
+                <div class="agent-card-description">Technical support and IT helpdesk assistance</div>
+              </div>
+            </div>
+            <div class="agent-card-stats">
+              <div class="agent-card-stat">
+                <div class="agent-card-stat-value">—</div>
+                <div class="agent-card-stat-label">Sessions</div>
+              </div>
+              <div class="agent-card-stat">
+                <div class="agent-card-stat-value">—</div>
+                <div class="agent-card-stat-label">Success Rate</div>
+              </div>
+            </div>
+            <div class="agent-card-footer">
+              <span class="badge badge-warning">Ready to Publish</span>
+              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); selectAgent('it'); navigateTo('agent-configure');">Review</button>
+            </div>
+          </div>
+          </div>
+          </div><!-- End Layer 2 -->
+        </div><!-- End Layer 1 -->
+      </div>
+
+      <!-- Knowledge Page -->
+      <div id="page-knowledge" class="page">
+        <!-- Layer 1: Primary Content Card -->
+        <div class="primary-content">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Knowledge</h1>
+              <p class="page-subtitle">Organization-wide knowledge sources</p>
+            </div>
+            <button class="btn btn-primary">+ Add Source</button>
+          </div>
+
+          <!-- Layer 2: Secondary Content Card -->
+          <div class="secondary-content">
+            <div class="segment-control" id="knowledge-segments">
+          <button class="segment-item active" onclick="showKnowledgeSection('sources')">Sources (5)</button>
+          <button class="segment-item" onclick="showKnowledgeSection('knowledgebase')">Knowledge Base (3)</button>
+          <button class="segment-item" onclick="showKnowledgeSection('sync')">Sync Status</button>
+        </div>
+
+        <!-- Sources Section -->
+        <div id="knowledge-sources" class="knowledge-section">
+          <div class="grid grid-4" style="margin-bottom: 24px;">
+            <div class="stat-card">
+              <div class="stat-label">Total Sources</div>
+              <div class="stat-value">5</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Documents</div>
+              <div class="stat-value">1,602</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Agents Using</div>
+              <div class="stat-value">8</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Last Sync</div>
+              <div class="stat-value" style="font-size: 20px;">3h ago</div>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr><th>Source</th><th>Type</th><th>Documents</th><th>Sync Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Product Documentation</strong></td>
+                  <td>Documents</td>
+                  <td>156</td>
+                  <td style="color: var(--success-color);">✓ Synced</td>
+                  <td><button class="btn btn-secondary btn-sm">Configure</button></td>
+                </tr>
+                <tr>
+                  <td><strong>FAQ Database</strong></td>
+                  <td>Database</td>
+                  <td>1,234</td>
+                  <td style="color: var(--success-color);">✓ Synced</td>
+                  <td><button class="btn btn-secondary btn-sm">Configure</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Support Articles</strong></td>
+                  <td>Website</td>
+                  <td>89</td>
+                  <td style="color: var(--warning-color);">⟳ Syncing...</td>
+                  <td><button class="btn btn-secondary btn-sm">Configure</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Knowledge Base Section -->
+        <div id="knowledge-knowledgebase" class="knowledge-section" style="display: none;">
+          <div class="filter-bar">
+            <input type="text" placeholder="Search knowledge bases...">
+            <button class="btn btn-primary" style="margin-left: auto;">+ Create Knowledge Base</button>
+          </div>
+
+          <div class="grid grid-3" style="gap: 16px;">
+            <div class="card" style="cursor: pointer;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <div style="width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center;">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+                </div>
+                <div>
+                  <div style="font-weight: 600;">Customer Support</div>
+                  <div style="font-size: 12px; color: var(--text-secondary);">3 sources • 489 documents</div>
+                </div>
+              </div>
+              <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Knowledge for customer-facing support agents and bots</p>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: var(--text-muted);">Used by 4 agents</span>
+                <button class="btn btn-secondary btn-sm">Edit</button>
+              </div>
+            </div>
+
+            <div class="card" style="cursor: pointer;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <div style="width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, #11998e, #38ef7d); display: flex; align-items: center; justify-content: center;">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+                </div>
+                <div>
+                  <div style="font-weight: 600;">Sales Enablement</div>
+                  <div style="font-size: 12px; color: var(--text-secondary);">2 sources • 234 documents</div>
+                </div>
+              </div>
+              <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Product info and pricing for sales conversations</p>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: var(--text-muted);">Used by 2 agents</span>
+                <button class="btn btn-secondary btn-sm">Edit</button>
+              </div>
+            </div>
+
+            <div class="card" style="cursor: pointer;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <div style="width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(135deg, #4facfe, #00f2fe); display: flex; align-items: center; justify-content: center;">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+                </div>
+                <div>
+                  <div style="font-weight: 600;">IT Helpdesk</div>
+                  <div style="font-size: 12px; color: var(--text-secondary);">2 sources • 879 documents</div>
+                </div>
+              </div>
+              <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Technical docs for internal IT support</p>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: var(--text-muted);">Used by 2 agents</span>
+                <button class="btn btn-secondary btn-sm">Edit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sync Status Section -->
+        <div id="knowledge-sync" class="knowledge-section" style="display: none;">
+          <div class="filter-bar">
+            <select style="min-width: 140px;">
+              <option>All Sources</option>
+              <option>Syncing</option>
+              <option>Synced</option>
+              <option>Failed</option>
+            </select>
+            <button class="btn btn-secondary btn-sm" style="margin-left: auto;">Sync All Now</button>
+          </div>
+
+          <div class="card" style="padding: 0;">
+            <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--success-color);"></div>
+                <div>
+                  <div style="font-weight: 500;">Product Documentation</div>
+                  <div style="font-size: 12px; color: var(--text-secondary);">Last synced: Today, 2:30 PM • 156 documents</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span class="badge badge-success">Synced</span>
+                <button class="btn btn-secondary btn-sm">Sync Now</button>
+              </div>
+            </div>
+
+            <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--success-color);"></div>
+                <div>
+                  <div style="font-weight: 500;">FAQ Database</div>
+                  <div style="font-size: 12px; color: var(--text-secondary);">Last synced: Today, 1:15 PM • 1,234 documents</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span class="badge badge-success">Synced</span>
+                <button class="btn btn-secondary btn-sm">Sync Now</button>
+              </div>
+            </div>
+
+            <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--warning-color); animation: pulse 1.5s infinite;"></div>
+                <div>
+                  <div style="font-weight: 500;">Support Articles</div>
+                  <div style="font-size: 12px; color: var(--text-secondary);">Started: 5 minutes ago • 45/89 documents processed</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span class="badge badge-warning">Syncing...</span>
+                <button class="btn btn-secondary btn-sm" disabled>Syncing</button>
+              </div>
+            </div>
+
+            <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--danger-color);"></div>
+                <div>
+                  <div style="font-weight: 500;">API Reference Docs</div>
+                  <div style="font-size: 12px; color: var(--text-secondary);">Last attempt: Yesterday, 4:00 PM • Error: Connection timeout</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span class="badge" style="background: #fee2e2; color: #dc2626;">Failed</span>
+                <button class="btn btn-secondary btn-sm">Retry</button>
+              </div>
+            </div>
+
+            <div style="padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--success-color);"></div>
+                <div>
+                  <div style="font-weight: 500;">Policy Documents</div>
+                  <div style="font-size: 12px; color: var(--text-secondary);">Last synced: Yesterday, 11:00 AM • 123 documents</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span class="badge badge-success">Synced</span>
+                <button class="btn btn-secondary btn-sm">Sync Now</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 24px;">
+            <h3 class="card-title" style="margin-bottom: 16px;">Sync History</h3>
+            <div style="font-size: 13px; color: var(--text-secondary);">
+              <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+                <span>Product Documentation synced successfully</span>
+                <span style="color: var(--text-muted);">Today, 2:30 PM</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+                <span>FAQ Database synced successfully</span>
+                <span style="color: var(--text-muted);">Today, 1:15 PM</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+                <span style="color: var(--danger-color);">API Reference Docs sync failed</span>
+                <span style="color: var(--text-muted);">Yesterday, 4:00 PM</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                <span>Policy Documents synced successfully</span>
+                <span style="color: var(--text-muted);">Yesterday, 11:00 AM</span>
+              </div>
+            </div>
+          </div>
+          </div>
+          </div><!-- End Layer 2 -->
+        </div><!-- End Layer 1 -->
+      </div>
+
+      <!-- Connections Page -->
+      <div id="page-connections" class="page">
+        <!-- Layer 1: Primary Content Card -->
+        <div class="primary-content">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Connections</h1>
+              <p class="page-subtitle">Third-party service integrations</p>
+            </div>
+            <button class="btn btn-primary">+ Add Service</button>
+          </div>
+
+          <!-- Layer 2: Secondary Content Card -->
+          <div class="secondary-content">
+            <div class="info-banner">
+          <span class="info-banner-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          </span>
+          <div class="info-banner-content">
+            <div class="info-banner-title">Channels are managed in Control Hub</div>
+            <div class="info-banner-text">Webex, Slack, Voice, and other channel configurations are handled in the Admin Portal. <a href="#" style="color: var(--accent-color);">Open Control Hub →</a></div>
+          </div>
+        </div>
+
+        <div class="tabs">
+          <div class="tab active">Third-Party Services (4)</div>
+          <div class="tab">Webhooks (2)</div>
+          <div class="tab">API Credentials</div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>Service</th><th>Status</th><th>Used by Agents</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Salesforce</strong></td>
+                <td style="color: var(--success-color);">● Connected</td>
+                <td>Customer Support Bot, Sales Assistant</td>
+                <td><button class="btn btn-secondary btn-sm">Configure</button></td>
+              </tr>
+              <tr>
+                <td><strong>ServiceNow</strong></td>
+                <td style="color: var(--success-color);">● Connected</td>
+                <td>IT Support Agent</td>
+                <td><button class="btn btn-secondary btn-sm">Configure</button></td>
+              </tr>
+              <tr>
+                <td><strong>Zendesk</strong></td>
+                <td style="color: var(--danger-color);">● Auth Expired</td>
+                <td>—</td>
+                <td><button class="btn btn-primary btn-sm">Reconnect</button></td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+          </div><!-- End Layer 2 -->
+        </div><!-- End Layer 1 -->
+      </div>
+
+      <!-- Organization Settings Page -->
+      <div id="page-settings" class="page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Organization Settings</h1>
+            <p class="page-subtitle">Manage your organization preferences and team</p>
+          </div>
+        </div>
+
+        <div class="tabs" id="settings-tabs">
+          <div class="tab active" onclick="showSettingsSection('general')">General</div>
+          <div class="tab" onclick="showSettingsSection('team')">Team Members</div>
+          <div class="tab" onclick="showSettingsSection('api')">API Keys</div>
+          <div class="tab" onclick="showSettingsSection('security')">Security</div>
+          <div class="tab" onclick="showSettingsSection('billing')">Billing</div>
+        </div>
+
+        <!-- General Section -->
+        <div id="settings-general" class="settings-section">
+          <div class="grid grid-2">
+            <div>
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">Organization Details</h3>
+                <div style="margin-bottom: 16px;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">Organization Name</label>
+                  <input type="text" value="Acme Corporation" style="width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; background: var(--bg-primary); color: var(--text-primary);">
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">Organization ID</label>
+                  <div style="padding: 10px 14px; background: var(--bg-primary); border-radius: 8px; font-size: 13px; font-family: monospace; color: var(--text-secondary);">org_acme_12345</div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">Timezone</label>
+                  <select style="width: 100%; padding: 10px 14px; border: 1px solid var(--outline-color); border-radius: 8px; font-size: 14px; background: transparent; color: var(--text-primary);">
+                    <option>(UTC-08:00) Pacific Time</option>
+                    <option>(UTC-05:00) Eastern Time</option>
+                    <option>(UTC+00:00) UTC</option>
+                  </select>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">Default Language</label>
+                  <select style="width: 100%; padding: 10px 14px; border: 1px solid var(--outline-color); border-radius: 8px; font-size: 14px; background: transparent; color: var(--text-primary);">
+                    <option>English (US)</option>
+                    <option>English (UK)</option>
+                    <option>Spanish</option>
+                    <option>French</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary" onclick="showToast('Settings saved')">Save Changes</button>
+              </div>
+            </div>
+            <div>
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">Branding</h3>
+                <div style="margin-bottom: 16px;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">Logo</label>
+                  <div style="border: 2px dashed var(--border-color); border-radius: 8px; padding: 24px; text-align: center; color: var(--text-secondary);">
+                    <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; margin: 0 auto 12px;"></div>
+                    <div style="font-size: 13px;">Click to upload or drag and drop</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">PNG, JPG up to 2MB</div>
+                  </div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">Primary Color</label>
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <input type="color" value="#0066cc" style="width: 40px; height: 40px; border: none; border-radius: 8px; cursor: pointer;">
+                    <input type="text" value="#0066cc" style="flex: 1; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; font-family: monospace;">
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">Notifications</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                  <div>
+                    <div style="font-weight: 500;">Email Notifications</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Receive alerts via email</div>
+                  </div>
+                  <input type="checkbox" checked style="width: 18px; height: 18px;">
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
+                  <div>
+                    <div style="font-weight: 500;">Weekly Reports</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Get weekly usage summaries</div>
+                  </div>
+                  <input type="checkbox" checked style="width: 18px; height: 18px;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team Members Section -->
+        <div id="settings-team" class="settings-section" style="display: none;">
+          <div class="filter-bar" style="margin-bottom: 16px;">
+            <input type="text" placeholder="Search team members...">
+            <select>
+              <option>All Roles</option>
+              <option>Admin</option>
+              <option>Developer</option>
+              <option>Viewer</option>
+            </select>
+            <button class="btn btn-primary" style="margin-left: auto;">+ Invite Member</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr><th>User</th><th>Role</th><th>Status</th><th>Last Active</th><th>Actions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center;">
+                      <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: 600;">SA</div>
+                      <div>
+                        <div style="font-weight: 500;">Sarah Admin</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">sarah@acme.com</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="badge badge-info">Admin</span></td>
+                  <td><span style="color: var(--success-color);">● Active</span></td>
+                  <td>2 minutes ago</td>
+                  <td><button class="btn btn-secondary btn-sm">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center;">
+                      <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #11998e, #38ef7d); margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: 600;">MD</div>
+                      <div>
+                        <div style="font-weight: 500;">Marcus Developer</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">marcus@acme.com</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="badge badge-success">Developer</span></td>
+                  <td><span style="color: var(--success-color);">● Active</span></td>
+                  <td>1 hour ago</td>
+                  <td><button class="btn btn-secondary btn-sm">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center;">
+                      <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #4facfe, #00f2fe); margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: 600;">JV</div>
+                      <div>
+                        <div style="font-weight: 500;">Jennifer Viewer</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">jennifer@acme.com</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="badge badge-warning">Viewer</span></td>
+                  <td><span style="color: var(--success-color);">● Active</span></td>
+                  <td>3 hours ago</td>
+                  <td><button class="btn btn-secondary btn-sm">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center;">
+                      <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f093fb, #f5576c); margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: 600;">TN</div>
+                      <div>
+                        <div style="font-weight: 500;">Tom Newman</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">tom@acme.com</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="badge badge-success">Developer</span></td>
+                  <td><span style="color: var(--text-muted);">● Offline</span></td>
+                  <td>2 days ago</td>
+                  <td><button class="btn btn-secondary btn-sm">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center;">
+                      <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--border-color); margin-right: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 13px; font-weight: 600;">?</div>
+                      <div>
+                        <div style="font-weight: 500;">alex@acme.com</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">Invited Jan 25, 2026</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="badge badge-success">Developer</span></td>
+                  <td><span style="color: var(--warning-color);">● Pending</span></td>
+                  <td>—</td>
+                  <td><button class="btn btn-secondary btn-sm">Resend</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- API Keys Section -->
+        <div id="settings-api" class="settings-section" style="display: none;">
+          <div class="grid grid-2">
+            <div>
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">API Keys</h3>
+                  <button class="btn btn-primary btn-sm">+ Generate New Key</button>
+                </div>
+                <div style="font-size: 14px;">
+                  <div style="padding: 16px 0; border-bottom: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                      <div>
+                        <div style="font-weight: 500;">Production Key</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">Created Jan 15, 2026 by Sarah Admin</div>
+                      </div>
+                      <span class="badge badge-success">Active</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <code style="flex: 1; background: var(--bg-primary); padding: 8px 12px; border-radius: 6px; font-size: 13px;">sk_live_acme_••••••••••••4f2a</code>
+                      <button class="btn btn-secondary btn-sm">Copy</button>
+                      <button class="btn btn-secondary btn-sm" style="color: var(--danger-color);">Revoke</button>
+                    </div>
+                  </div>
+                  <div style="padding: 16px 0; border-bottom: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                      <div>
+                        <div style="font-weight: 500;">Development Key</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">Created Dec 3, 2025 by Marcus Developer</div>
+                      </div>
+                      <span class="badge badge-success">Active</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <code style="flex: 1; background: var(--bg-primary); padding: 8px 12px; border-radius: 6px; font-size: 13px;">sk_test_acme_••••••••••••8c1b</code>
+                      <button class="btn btn-secondary btn-sm">Copy</button>
+                      <button class="btn btn-secondary btn-sm" style="color: var(--danger-color);">Revoke</button>
+                    </div>
+                  </div>
+                  <div style="padding: 16px 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                      <div>
+                        <div style="font-weight: 500;">CI/CD Pipeline Key</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">Created Nov 20, 2025 by Tom Newman</div>
+                      </div>
+                      <span class="badge badge-success">Active</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <code style="flex: 1; background: var(--bg-primary); padding: 8px 12px; border-radius: 6px; font-size: 13px;">sk_live_acme_••••••••••••7d3e</code>
+                      <button class="btn btn-secondary btn-sm">Copy</button>
+                      <button class="btn btn-secondary btn-sm" style="color: var(--danger-color);">Revoke</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">API Usage</h3>
+                <div class="grid grid-2" style="gap: 12px; margin-bottom: 16px;">
+                  <div class="stat-card" style="padding: 16px;">
+                    <div class="stat-label">Requests (This Month)</div>
+                    <div class="stat-value" style="font-size: 24px;">127,892</div>
+                  </div>
+                  <div class="stat-card" style="padding: 16px;">
+                    <div class="stat-label">Avg Response Time</div>
+                    <div class="stat-value" style="font-size: 24px;">142ms</div>
+                  </div>
+                </div>
+                <div style="background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: 12px; height: 150px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                  [API Usage Chart]
+                </div>
+              </div>
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">Webhooks</h3>
+                <div style="font-size: 14px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                    <div>
+                      <div style="font-weight: 500;">Session Completed</div>
+                      <div style="font-size: 12px; color: var(--text-secondary);">https://api.acme.com/webhooks/session</div>
+                    </div>
+                    <span style="color: var(--success-color);">● Active</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
+                    <div>
+                      <div style="font-weight: 500;">Agent Published</div>
+                      <div style="font-size: 12px; color: var(--text-secondary);">https://api.acme.com/webhooks/publish</div>
+                    </div>
+                    <span style="color: var(--success-color);">● Active</span>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" style="margin-top: 12px;">+ Add Webhook</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security Section -->
+        <div id="settings-security" class="settings-section" style="display: none;">
+          <div class="grid grid-2">
+            <div>
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">Authentication</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--bg-primary); border-radius: 8px; margin-bottom: 16px;">
+                  <div>
+                    <div style="font-weight: 500;">Single Sign-On (SSO)</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Enable SAML-based SSO for your organization</div>
+                  </div>
+                  <span class="badge badge-success">Enabled</span>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">Identity Provider</label>
+                  <select style="width: 100%; padding: 10px 14px; border: 1px solid var(--outline-color); border-radius: 8px; font-size: 14px; background: transparent; color: var(--text-primary);">
+                    <option>Okta</option>
+                    <option>Azure AD</option>
+                    <option>Google Workspace</option>
+                    <option>OneLogin</option>
+                  </select>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">SSO URL</label>
+                  <input type="text" value="https://acme.okta.com/app/webex-ai-studio" style="width: 100%; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px;">
+                </div>
+                <button class="btn btn-primary" onclick="showToast('SSO settings saved')">Save SSO Settings</button>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">Two-Factor Authentication</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                  <div>
+                    <div style="font-weight: 500;">Require 2FA for all users</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Enforce two-factor authentication</div>
+                  </div>
+                  <input type="checkbox" checked style="width: 18px; height: 18px;">
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
+                  <div>
+                    <div style="font-weight: 500;">Require 2FA for Admins only</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Only admin roles need 2FA</div>
+                  </div>
+                  <input type="checkbox" style="width: 18px; height: 18px;">
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">Session Settings</h3>
+                <div style="margin-bottom: 16px;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">Session Timeout</label>
+                  <select style="width: 100%; padding: 10px 14px; border: 1px solid var(--outline-color); border-radius: 8px; font-size: 14px; background: transparent; color: var(--text-primary);">
+                    <option>30 minutes</option>
+                    <option>1 hour</option>
+                    <option>4 hours</option>
+                    <option>8 hours</option>
+                    <option>24 hours</option>
+                  </select>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <label style="display: block; font-weight: 500; margin-bottom: 6px; font-size: 13px; color: var(--text-secondary);">Max Concurrent Sessions</label>
+                  <select style="width: 100%; padding: 10px 14px; border: 1px solid var(--outline-color); border-radius: 8px; font-size: 14px; background: transparent; color: var(--text-primary);">
+                    <option>1 session</option>
+                    <option>3 sessions</option>
+                    <option>5 sessions</option>
+                    <option>Unlimited</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Audit Log</h3>
+                  <button class="btn btn-secondary btn-sm">Export</button>
+                </div>
+                <div style="font-size: 14px;">
+                  <div style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between;">
+                      <span style="font-weight: 500;">API Key generated</span>
+                      <span style="font-size: 12px; color: var(--text-secondary);">2 hours ago</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">by Sarah Admin</div>
+                  </div>
+                  <div style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between;">
+                      <span style="font-weight: 500;">User invited</span>
+                      <span style="font-size: 12px; color: var(--text-secondary);">5 hours ago</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">alex@acme.com by Sarah Admin</div>
+                  </div>
+                  <div style="padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between;">
+                      <span style="font-weight: 500;">SSO configuration updated</span>
+                      <span style="font-size: 12px; color: var(--text-secondary);">1 day ago</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">by Sarah Admin</div>
+                  </div>
+                  <div style="padding: 10px 0;">
+                    <div style="display: flex; justify-content: space-between;">
+                      <span style="font-weight: 500;">Agent published</span>
+                      <span style="font-size: 12px; color: var(--text-secondary);">2 days ago</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Customer Support Bot by Marcus Developer</div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" style="margin-top: 12px; width: 100%;">View All Activity</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing Section -->
+        <div id="settings-billing" class="settings-section" style="display: none;">
+          <div class="grid grid-2">
+            <div>
+              <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;">
+                  <div>
+                    <div style="font-size: 13px; opacity: 0.8;">Current Plan</div>
+                    <div style="font-size: 28px; font-weight: 700;">Enterprise</div>
+                  </div>
+                  <span style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px;">Active</span>
+                </div>
+                <div style="display: flex; gap: 24px; margin-bottom: 16px;">
+                  <div>
+                    <div style="font-size: 12px; opacity: 0.8;">Monthly Sessions</div>
+                    <div style="font-size: 18px; font-weight: 600;">Unlimited</div>
+                  </div>
+                  <div>
+                    <div style="font-size: 12px; opacity: 0.8;">Agents</div>
+                    <div style="font-size: 18px; font-weight: 600;">Unlimited</div>
+                  </div>
+                  <div>
+                    <div style="font-size: 12px; opacity: 0.8;">Team Members</div>
+                    <div style="font-size: 18px; font-weight: 600;">Unlimited</div>
+                  </div>
+                </div>
+                <div style="font-size: 12px; opacity: 0.8;">Renews on March 1, 2026</div>
+              </div>
+
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">Usage This Month</h3>
+                <div style="margin-bottom: 16px;">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 13px;">Sessions</span>
+                    <span style="font-size: 13px; font-weight: 500;">15,432 / Unlimited</span>
+                  </div>
+                  <div style="height: 8px; background: var(--bg-primary); border-radius: 4px; overflow: hidden;">
+                    <div style="width: 45%; height: 100%; background: var(--accent-color); border-radius: 4px;"></div>
+                  </div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 13px;">API Calls</span>
+                    <span style="font-size: 13px; font-weight: 500;">127,892 / Unlimited</span>
+                  </div>
+                  <div style="height: 8px; background: var(--bg-primary); border-radius: 4px; overflow: hidden;">
+                    <div style="width: 32%; height: 100%; background: var(--success-color); border-radius: 4px;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 13px;">Knowledge Storage</span>
+                    <span style="font-size: 13px; font-weight: 500;">2.4 GB / 50 GB</span>
+                  </div>
+                  <div style="height: 8px; background: var(--bg-primary); border-radius: 4px; overflow: hidden;">
+                    <div style="width: 5%; height: 100%; background: var(--warning-color); border-radius: 4px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">Payment Method</h3>
+                <div style="display: flex; align-items: center; padding: 16px; background: var(--bg-primary); border-radius: 8px; margin-bottom: 16px;">
+                  <div style="width: 48px; height: 32px; background: linear-gradient(135deg, #1a1f71, #00579f); border-radius: 4px; margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 700;">VISA</div>
+                  <div style="flex: 1;">
+                    <div style="font-weight: 500;">•••• •••• •••• 4242</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">Expires 12/2027</div>
+                  </div>
+                  <button class="btn btn-secondary btn-sm">Edit</button>
+                </div>
+                <button class="btn btn-secondary btn-sm">+ Add Payment Method</button>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Billing History</h3>
+                  <button class="btn btn-secondary btn-sm">Download All</button>
+                </div>
+                <table>
+                  <thead>
+                    <tr><th>Date</th><th>Description</th><th>Amount</th><th></th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Jan 1, 2026</td>
+                      <td>Enterprise Plan - Monthly</td>
+                      <td style="font-weight: 500;">$499.00</td>
+                      <td><a href="#" style="color: var(--accent-color); font-size: 13px;">PDF</a></td>
+                    </tr>
+                    <tr>
+                      <td>Dec 1, 2025</td>
+                      <td>Enterprise Plan - Monthly</td>
+                      <td style="font-weight: 500;">$499.00</td>
+                      <td><a href="#" style="color: var(--accent-color); font-size: 13px;">PDF</a></td>
+                    </tr>
+                    <tr>
+                      <td>Nov 1, 2025</td>
+                      <td>Enterprise Plan - Monthly</td>
+                      <td style="font-weight: 500;">$499.00</td>
+                      <td><a href="#" style="color: var(--accent-color); font-size: 13px;">PDF</a></td>
+                    </tr>
+                    <tr>
+                      <td>Oct 1, 2025</td>
+                      <td>Pro Plan - Monthly</td>
+                      <td style="font-weight: 500;">$199.00</td>
+                      <td><a href="#" style="color: var(--accent-color); font-size: 13px;">PDF</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent Overview Page -->
+      <div id="page-agent-overview" class="page">
+        <!-- Layer 1: Primary Content Card -->
+        <div class="primary-content">
+          <div class="agent-header" style="margin-bottom: 16px;">
+            <div class="agent-avatar">CS</div>
+            <div class="agent-info">
+              <div class="agent-name-row">
+                <span class="agent-name">Customer Support Bot</span>
+                <span class="badge badge-success" id="status-badge">Published</span>
+              </div>
+              <div class="agent-meta">Handles customer inquiries • Last updated 2 hours ago</div>
+            </div>
+            <button class="btn btn-secondary" id="publish-btn">Unpublish</button>
+          </div>
+
+          <div class="tabs" style="margin-bottom: 16px;">
+            <div class="tab active" onclick="navigateTo('agent-overview')">Overview</div>
+            <div class="tab" onclick="navigateTo('agent-configure')">Configure</div>
+            <div class="tab" onclick="navigateTo('agent-monitor')">Monitor</div>
+            <div class="tab" onclick="navigateTo('agent-changelog')">Changelog</div>
+          </div>
+
+          <!-- Layer 2: Secondary Content Card -->
+          <div class="secondary-content">
+            <div class="grid grid-2">
+          <div>
+            <div class="card" id="overview-quick-stats" style="margin-bottom: 16px;">
+              <h3 class="card-title" style="margin-bottom: 16px;">Quick Stats (7 days)</h3>
+              <div class="grid grid-2" style="gap: 12px;">
+                <div class="stat-card" style="padding: 16px;">
+                  <div class="stat-label">Sessions</div>
+                  <div class="stat-value" style="font-size: 24px;">5,234</div>
+                </div>
+                <div class="stat-card" style="padding: 16px;">
+                  <div class="stat-label">Success Rate</div>
+                  <div class="stat-value" style="font-size: 24px;">94.2%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Configuration Summary</h3>
+                <button class="btn btn-secondary btn-sm" onclick="navigateTo('agent-configure')">Edit</button>
+              </div>
+              <div style="font-size: 14px;">
+                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                  <span style="color: var(--text-secondary);">Knowledge Sources</span>
+                  <span style="font-weight: 500;">3 assigned</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                  <span style="color: var(--text-secondary);">Capabilities</span>
+                  <span style="font-weight: 500;">12 enabled</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                  <span style="color: var(--text-secondary);">Connected Services</span>
+                  <span style="font-weight: 500;">2 active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom: 8px;">Deployments</h3>
+              <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Where this agent is embedded (read-only)</p>
+              
+              <!-- Published agent: show active deployments -->
+              <div class="deployment-widget" id="deployments-published">
+                <div class="deployment-section">
+                  <div class="deployment-section-title">
+                    <span>FlowBuilder Digital</span>
+                    <a href="#" class="deployment-link">View in Connect →</a>
+                  </div>
+                  <div class="deployment-item">
+                    <span>Customer Support Flow</span>
+                  </div>
+                  <div class="deployment-item">
+                    <span>Website Chat Flow</span>
+                  </div>
+                </div>
+                <div class="deployment-section">
+                  <div class="deployment-section-title">
+                    <span>FlowBuilder Voice</span>
+                    <a href="#" class="deployment-link">View in FlowBuilder →</a>
+                  </div>
+                  <div class="deployment-item">
+                    <span>IVR Support Flow</span>
+                  </div>
+                </div>
+                <div class="deployment-section">
+                  <div class="deployment-section-title">
+                    <span>Agent Desktop</span>
+                    <a href="#" class="deployment-link">View in Agent Desktop →</a>
+                  </div>
+                  <div class="deployment-item">
+                    <span>AI Assistant for Support Agents</span>
+                  </div>
+                </div>
+                <div class="deployment-section">
+                  <div class="deployment-section-title">
+                    <span>Control Hub</span>
+                    <a href="#" class="deployment-link">View in Control Hub →</a>
+                  </div>
+                  <div class="deployment-item">
+                    <span>Channel Management</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Unpublished agent: show deployment options -->
+              <div class="deployment-widget" id="deployments-unpublished" style="display: none;">
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Deploy your agent to make it available in these channels:</p>
+                <div class="deployment-section">
+                  <div class="deployment-item">
+                    <span>Deploy to digital flow</span>
+                    <a href="#" class="deployment-link">Go to Webex Connect →</a>
+                  </div>
+                  <div class="deployment-item">
+                    <span>Deploy to voice flow</span>
+                    <a href="#" class="deployment-link">Go to FlowBuilder →</a>
+                  </div>
+                  <div class="deployment-item">
+                    <span>Deploy to Agent Desktop</span>
+                    <a href="#" class="deployment-link">Go to Agent Desktop →</a>
+                  </div>
+                  <div class="deployment-item">
+                    <span>Manage channels</span>
+                    <a href="#" class="deployment-link">Go to Control Hub →</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          </div><!-- End Layer 2 -->
+        </div><!-- End Layer 1 -->
+      </div>
+
+      <!-- Agent Configure Page -->
+      <div id="page-agent-configure" class="page">
+        <!-- Layer 1: Primary Content Card -->
+        <div class="primary-content">
+          <div class="agent-header" style="margin-bottom: 16px;">
+            <div class="agent-avatar">CS</div>
+            <div class="agent-info">
+              <div class="agent-name">Customer Support Bot</div>
+              <div class="agent-meta">Configure your agent settings</div>
+            </div>
+            <button class="btn btn-secondary" style="margin-right: 8px;">Preview</button>
+            <button class="btn btn-primary" onclick="showToast('Changes saved successfully')">Save Changes</button>
+          </div>
+
+          <div class="tabs" style="margin-bottom: 16px;">
+            <div class="tab" onclick="navigateTo('agent-overview')">Overview</div>
+            <div class="tab active" onclick="navigateTo('agent-configure')">Configure</div>
+            <div class="tab" onclick="navigateTo('agent-monitor')">Monitor</div>
+            <div class="tab" onclick="navigateTo('agent-changelog')">Changelog</div>
+          </div>
+
+          <!-- Layer 2: Secondary Content Card -->
+          <div class="secondary-content">
+          <div class="segment-control" id="config-segments">
+            <button class="segment-item active" onclick="showConfigSection('general')">General</button>
+            <button class="segment-item" onclick="showConfigSection('prompt')">Prompt</button>
+            <button class="segment-item" onclick="showConfigSection('knowledge')">Knowledge</button>
+            <button class="segment-item" onclick="showConfigSection('capabilities')">Capabilities</button>
+            <button class="segment-item" onclick="showConfigSection('language')">Language</button>
+          </div>
+
+          <!-- Config Sections -->
+          <div id="config-general" class="config-section" style="display: block;">
+            <div class="card">
+              <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 500; margin-bottom: 6px;">Agent Name</label>
+                <input type="text" value="Customer Support Bot" style="width: 100%; padding: 10px 14px; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; font-size: 14px; background: transparent; color: var(--text-primary);">
+              </div>
+              <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 500; margin-bottom: 6px;">Description</label>
+                <textarea style="width: 100%; padding: 10px 14px; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; font-size: 14px; min-height: 80px; resize: vertical; background: transparent; color: var(--text-primary);">Handles customer inquiries and support tickets. This agent can search knowledge bases, create tickets, and escalate to human agents when needed.</textarea>
+              </div>
+            </div>
+          </div>
+
+          <div id="config-prompt" class="config-section" style="display: none;">
+            <div class="card">
+              <label style="display: block; font-weight: 500; margin-bottom: 6px;">System Prompt</label>
+              <textarea style="width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 13px; font-family: Monaco, Menlo, monospace; min-height: 300px; resize: vertical;">You are a helpful customer support agent for Acme Corporation. Your role is to assist customers with their inquiries, troubleshoot issues, and provide accurate information.
+
+## Guidelines:
+- Always be polite, professional, and empathetic
+- If you don't know the answer, search the knowledge base first
+- For complex issues, offer to create a support ticket
+- Escalate to a human agent when requested</textarea>
+            </div>
+          </div>
+
+          <div id="config-knowledge" class="config-section" style="display: none;">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+              <button class="btn btn-secondary btn-sm" onclick="navigateTo('knowledge')">Manage Knowledge →</button>
+            </div>
+            <div class="card" style="padding: 0;">
+              <table>
+                <thead><tr><th></th><th>Source</th><th>Type</th><th>Documents</th></tr></thead>
+                <tbody>
+                  <tr><td><input type="checkbox" checked></td><td><strong>Product Documentation</strong></td><td>Documents</td><td>156</td></tr>
+                  <tr><td><input type="checkbox" checked></td><td><strong>FAQ Database</strong></td><td>Database</td><td>1,234</td></tr>
+                  <tr><td><input type="checkbox" checked></td><td><strong>Support Articles</strong></td><td>Website</td><td>89</td></tr>
+                  <tr><td><input type="checkbox"></td><td><strong>Policy Documents</strong></td><td>Documents</td><td>45</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="config-capabilities" class="config-section" style="display: none;">
+            <div class="filter-bar">
+              <input type="text" placeholder="Search capabilities...">
+              <select style="min-width: 140px;">
+                <option>All Types (12)</option>
+                <option>Actions (5)</option>
+                <option>MCP (4)</option>
+                <option>Skills (3)</option>
+              </select>
+              <button class="btn btn-primary" style="margin-left: auto;">+ Add Capability</button>
+            </div>
+            <div class="card" style="padding: 0;">
+              <div class="capability-item">
+                <label class="capability-toggle">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+                <span class="capability-name">Create Salesforce Ticket</span>
+                <span class="capability-type">Action</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <label class="capability-toggle">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+                <span class="capability-name">Search Knowledge Base</span>
+                <span class="capability-type">Action</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <label class="capability-toggle">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+                <span class="capability-name">GitHub MCP Server</span>
+                <span class="capability-type">MCP</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <label class="capability-toggle">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+                <span class="capability-name">Calendar Management</span>
+                <span class="capability-type">Skill</span>
+                <span class="capability-action">Configure</span>
+              </div>
+              <div class="capability-item">
+                <label class="capability-toggle">
+                  <input type="checkbox">
+                  <span class="toggle-slider"></span>
+                </label>
+                <span class="capability-name">Language Translation</span>
+                <span class="capability-type">Skill</span>
+                <span class="capability-action">Configure</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="config-language" class="config-section" style="display: none;">
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom: 16px;">Language Settings</h3>
+              <div class="form-group">
+                <label class="form-label">Primary Language</label>
+                <select class="form-input" style="max-width: 300px;">
+                  <option>English (US)</option>
+                  <option>English (UK)</option>
+                  <option>Spanish</option>
+                  <option>French</option>
+                  <option>German</option>
+                  <option>Portuguese</option>
+                  <option>Japanese</option>
+                  <option>Chinese (Simplified)</option>
+                </select>
+                <p class="form-hint">The main language this agent will communicate in</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom: 16px;">Multi-language Support</h3>
+              <div class="form-group">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                  <div>
+                    <div style="font-weight: 500;">Enable automatic language detection</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">Automatically detect and respond in the user's language</div>
+                  </div>
+                  <label class="capability-toggle">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <div style="font-weight: 500;">Enable translation fallback</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">Translate responses when knowledge is not available in the detected language</div>
+                  </div>
+                  <label class="capability-toggle">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom: 16px;">Supported Languages</h3>
+              <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">Select which languages this agent can respond in</p>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox" checked> English
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox" checked> Spanish
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox" checked> French
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox"> German
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox"> Portuguese
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox"> Japanese
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox"> Chinese (Simplified)
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox"> Korean
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox"> Italian
+                </label>
+              </div>
+            </div>
+          </div>
+          </div><!-- End Layer 2 -->
+        </div><!-- End Layer 1 -->
+      </div>
+
+      <!-- Agent Monitor Page -->
+      <div id="page-agent-monitor" class="page">
+        <!-- Layer 1: Primary Content Card -->
+        <div class="primary-content">
+          <div class="agent-header" style="margin-bottom: 16px;">
+            <div class="agent-avatar">CS</div>
+            <div class="agent-info">
+              <div class="agent-name-row">
+                <span class="agent-name">Customer Support Bot</span>
+                <span class="badge badge-success">Published</span>
+              </div>
+              <div class="agent-meta">Monitor performance and sessions</div>
+            </div>
+          </div>
+
+          <div class="tabs" style="margin-bottom: 16px;">
+            <div class="tab" onclick="navigateTo('agent-overview')">Overview</div>
+            <div class="tab" onclick="navigateTo('agent-configure')">Configure</div>
+            <div class="tab active" onclick="navigateTo('agent-monitor')">Monitor</div>
+            <div class="tab" onclick="navigateTo('agent-changelog')">Changelog</div>
+          </div>
+
+          <!-- Layer 2: Secondary Content Card -->
+          <div class="secondary-content">
+            <div class="segment-control" id="monitor-segments">
+          <button class="segment-item active" onclick="showMonitorSection('analytics')">Analytics</button>
+          <button class="segment-item" onclick="showMonitorSection('sessions')">Sessions</button>
+          <button class="segment-item" onclick="showMonitorSection('testing')">Testing</button>
+        </div>
+
+        <!-- Analytics Section -->
+        <div id="monitor-analytics" class="monitor-section">
+          <div class="filter-bar">
+            <select><option>Last 7 days</option><option>Last 30 days</option></select>
+            <button class="btn btn-secondary btn-sm" style="margin-left: auto;">Export Report</button>
+          </div>
+
+          <div class="grid grid-4" style="margin-bottom: 24px;">
+            <div class="stat-card">
+              <div class="stat-label">Sessions</div>
+              <div class="stat-value">5,234</div>
+              <div class="stat-change positive">↑ 12%</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Messages</div>
+              <div class="stat-value">18,921</div>
+              <div class="stat-change positive">↑ 8%</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Success Rate</div>
+              <div class="stat-value">94.2%</div>
+              <div class="stat-change positive">↑ 2.1%</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Avg Response</div>
+              <div class="stat-value">1.2s</div>
+              <div class="stat-change positive">↓ 0.3s</div>
+            </div>
+          </div>
+
+          <div class="grid grid-2">
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom: 16px;">Sessions Over Time</h3>
+              <div style="background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: 12px; height: 200px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                [Chart Placeholder]
+              </div>
+            </div>
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom: 16px;">Resolution Status</h3>
+              <div style="background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: 12px; height: 200px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                [Chart Placeholder]
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sessions Section -->
+        <div id="monitor-sessions" class="monitor-section" style="display: none;">
+          <div class="filter-bar">
+            <input type="text" placeholder="Search sessions...">
+            <select style="min-width: 140px;">
+              <option>All Outcomes</option>
+              <option>Resolved</option>
+              <option>Escalated</option>
+              <option>Abandoned</option>
+            </select>
+            <select>
+              <option>Last 7 days</option>
+              <option>Last 30 days</option>
+              <option>Last 90 days</option>
+            </select>
+            <button class="btn btn-secondary btn-sm" style="margin-left: auto;">Export</button>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Session ID</th>
+                  <th>User</th>
+                  <th>Started</th>
+                  <th>Duration</th>
+                  <th>Messages</th>
+                  <th>Outcome</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family: monospace; font-size: 12px;">#SES-7823</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">JD</div>
+                      john.doe@email.com
+                    </div>
+                  </td>
+                  <td style="color: var(--text-secondary);">Today, 2:34 PM</td>
+                  <td>4m 23s</td>
+                  <td>12</td>
+                  <td><span class="badge badge-success">Resolved</span></td>
+                  <td><button class="btn btn-secondary btn-sm">View</button></td>
+                </tr>
+                <tr>
+                  <td style="font-family: monospace; font-size: 12px;">#SES-7822</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">AS</div>
+                      alice.smith@company.com
+                    </div>
+                  </td>
+                  <td style="color: var(--text-secondary);">Today, 1:15 PM</td>
+                  <td>8m 45s</td>
+                  <td>24</td>
+                  <td><span class="badge badge-warning">Escalated</span></td>
+                  <td><button class="btn btn-secondary btn-sm">View</button></td>
+                </tr>
+                <tr>
+                  <td style="font-family: monospace; font-size: 12px;">#SES-7821</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">MJ</div>
+                      mike.jones@mail.com
+                    </div>
+                  </td>
+                  <td style="color: var(--text-secondary);">Today, 11:42 AM</td>
+                  <td>2m 10s</td>
+                  <td>6</td>
+                  <td><span class="badge badge-success">Resolved</span></td>
+                  <td><button class="btn btn-secondary btn-sm">View</button></td>
+                </tr>
+                <tr>
+                  <td style="font-family: monospace; font-size: 12px;">#SES-7820</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">SW</div>
+                      sarah.wilson@org.net
+                    </div>
+                  </td>
+                  <td style="color: var(--text-secondary);">Today, 10:05 AM</td>
+                  <td>1m 32s</td>
+                  <td>4</td>
+                  <td><span class="badge" style="background: #fee2e2; color: #dc2626;">Abandoned</span></td>
+                  <td><button class="btn btn-secondary btn-sm">View</button></td>
+                </tr>
+                <tr>
+                  <td style="font-family: monospace; font-size: 12px;">#SES-7819</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">RB</div>
+                      robert.brown@email.com
+                    </div>
+                  </td>
+                  <td style="color: var(--text-secondary);">Yesterday, 4:28 PM</td>
+                  <td>6m 15s</td>
+                  <td>18</td>
+                  <td><span class="badge badge-success">Resolved</span></td>
+                  <td><button class="btn btn-secondary btn-sm">View</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; color: var(--text-secondary); font-size: 13px;">
+            <span>Showing 1-5 of 5,234 sessions</span>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary btn-sm" disabled>Previous</button>
+              <button class="btn btn-secondary btn-sm">Next</button>
+            </div>
+          </div>
+
+            <!-- Testing Section -->
+            <div id="monitor-testing" class="monitor-section" style="display: none;">
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom: 16px;">Testing Playground</h3>
+                <div style="background: var(--bg-primary); border-radius: 8px; padding: 20px; min-height: 300px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                  [Chat Interface Placeholder]<br><br>
+                  Type a message to test the agent
+                </div>
+              </div>
+            </div>
+          </div>
+          </div><!-- End Layer 2 -->
+        </div><!-- End Layer 1 -->
+      </div>
+
+      <!-- Agent Changelog Page -->
+      <div id="page-agent-changelog" class="page">
+        <!-- Layer 1: Primary Content Card -->
+        <div class="primary-content">
+          <div class="agent-header" style="margin-bottom: 16px;">
+            <div class="agent-avatar">CS</div>
+            <div class="agent-info">
+              <div class="agent-name-row">
+                <span class="agent-name">Customer Support Bot</span>
+                <span class="badge badge-success">Published</span>
+              </div>
+              <div class="agent-meta">Version history and changes</div>
+            </div>
+          </div>
+
+          <div class="tabs" style="margin-bottom: 16px;">
+            <div class="tab" onclick="navigateTo('agent-overview')">Overview</div>
+            <div class="tab" onclick="navigateTo('agent-configure')">Configure</div>
+            <div class="tab" onclick="navigateTo('agent-monitor')">Monitor</div>
+            <div class="tab active" onclick="navigateTo('agent-changelog')">Changelog</div>
+          </div>
+
+          <!-- Layer 2: Secondary Content Card -->
+          <div class="secondary-content">
+            <div class="filter-bar">
+              <input type="text" placeholder="Search changes...">
+              <select>
+                <option>All Changes</option>
+                <option>Published</option>
+                <option>Configuration</option>
+                <option>Knowledge</option>
+              </select>
+            </div>
+
+            <div class="card" style="padding: 0;">
+          <!-- Version Entry -->
+          <div style="padding: 20px; border-bottom: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                  <span style="font-weight: 600; font-size: 15px;">v2.4.0</span>
+                  <span class="badge badge-success">Published</span>
+                  <span style="font-size: 12px; color: var(--text-muted);">Current</span>
+                </div>
+                <div style="font-size: 13px; color: var(--text-secondary);">Published by Sarah Chen • Jan 28, 2026, 3:45 PM</div>
+              </div>
+              <button class="btn btn-secondary btn-sm">View Details</button>
+            </div>
+            <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); font-size: 14px;">
+              <li>Updated system prompt to improve response accuracy</li>
+              <li>Added 45 new FAQ articles to knowledge base</li>
+              <li>Enabled calendar integration capability</li>
+            </ul>
+          </div>
+
+          <!-- Version Entry -->
+          <div style="padding: 20px; border-bottom: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                  <span style="font-weight: 600; font-size: 15px;">v2.3.1</span>
+                  <span class="badge" style="background: var(--bg-primary); color: var(--text-secondary);">Superseded</span>
+                </div>
+                <div style="font-size: 13px; color: var(--text-secondary);">Published by Mike Johnson • Jan 25, 2026, 10:22 AM</div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-sm">View Details</button>
+                <button class="btn btn-secondary btn-sm">Rollback</button>
+              </div>
+            </div>
+            <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); font-size: 14px;">
+              <li>Fixed escalation logic for billing inquiries</li>
+              <li>Minor prompt adjustments for tone consistency</li>
+            </ul>
+          </div>
+
+          <!-- Version Entry -->
+          <div style="padding: 20px; border-bottom: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                  <span style="font-weight: 600; font-size: 15px;">v2.3.0</span>
+                  <span class="badge" style="background: var(--bg-primary); color: var(--text-secondary);">Superseded</span>
+                </div>
+                <div style="font-size: 13px; color: var(--text-secondary);">Published by Sarah Chen • Jan 20, 2026, 2:15 PM</div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-sm">View Details</button>
+                <button class="btn btn-secondary btn-sm">Rollback</button>
+              </div>
+            </div>
+            <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); font-size: 14px;">
+              <li>Major knowledge base update with product documentation refresh</li>
+              <li>Added Salesforce ticket creation capability</li>
+              <li>Improved handling of multi-language queries</li>
+            </ul>
+          </div>
+
+          <!-- Version Entry -->
+          <div style="padding: 20px; border-bottom: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                  <span style="font-weight: 600; font-size: 15px;">v2.2.0</span>
+                  <span class="badge" style="background: var(--bg-primary); color: var(--text-secondary);">Superseded</span>
+                </div>
+                <div style="font-size: 13px; color: var(--text-secondary);">Published by Alex Kim • Jan 12, 2026, 11:30 AM</div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-sm">View Details</button>
+                <button class="btn btn-secondary btn-sm">Rollback</button>
+              </div>
+            </div>
+            <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); font-size: 14px;">
+              <li>Initial FlowBuilder integration for voice channel</li>
+              <li>Added order status lookup action</li>
+            </ul>
+          </div>
+
+          <!-- Version Entry -->
+          <div style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                  <span style="font-weight: 600; font-size: 15px;">v2.1.0</span>
+                  <span class="badge" style="background: var(--bg-primary); color: var(--text-secondary);">Superseded</span>
+                </div>
+                <div style="font-size: 13px; color: var(--text-secondary);">Published by Sarah Chen • Jan 5, 2026, 9:00 AM</div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-sm">View Details</button>
+                <button class="btn btn-secondary btn-sm">Rollback</button>
+              </div>
+            </div>
+            <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); font-size: 14px;">
+              <li>First production release</li>
+              <li>Core customer support functionality</li>
+              <li>Integration with Product Documentation knowledge base</li>
+            </ul>
+          </div>
+
+            </div>
+            <div style="display: flex; justify-content: center; margin-top: 16px;">
+              <button class="btn btn-secondary btn-sm">Load More</button>
+            </div>
+          </div><!-- End Layer 2 -->
+        </div><!-- End Layer 1 -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Create Agent Modal -->
+  <div class="modal-overlay" id="create-agent-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Create New Agent</h2>
+        <button class="modal-close" onclick="closeCreateAgentModal()">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
+
+      <!-- Wizard Progress -->
+      <div class="wizard-progress">
+        <div class="wizard-step active" data-step="1">
+          <div class="wizard-step-number">1</div>
+          <span class="wizard-step-label">Type</span>
+        </div>
+        <div class="wizard-step-line"></div>
+        <div class="wizard-step" data-step="2">
+          <div class="wizard-step-number">2</div>
+          <span class="wizard-step-label">Details</span>
+        </div>
+        <div class="wizard-step-line"></div>
+        <div class="wizard-step" data-step="3">
+          <div class="wizard-step-number">3</div>
+          <span class="wizard-step-label">Configure</span>
+        </div>
+        <div class="wizard-step-line"></div>
+        <div class="wizard-step" data-step="4">
+          <div class="wizard-step-number">4</div>
+          <span class="wizard-step-label">Review</span>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <!-- Step 1: Choose Agent Type -->
+        <div class="wizard-panel active" id="wizard-step-1">
+          <div class="agent-type-grid">
+            <div class="agent-type-card selected" onclick="selectAgentType('ai')">
+              <div class="agent-type-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <svg viewBox="0 0 24 24" fill="white"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+              </div>
+              <h3>AI Agent</h3>
+              <p>Powered by large language models for natural, conversational interactions</p>
+              <div class="agent-type-features">
+                <div class="agent-type-feature">
+                  <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Natural language understanding</span>
+                </div>
+                <div class="agent-type-feature">
+                  <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Context-aware responses</span>
+                </div>
+                <div class="agent-type-feature">
+                  <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Knowledge base integration</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="agent-type-card" onclick="selectAgentType('scripted')">
+              <div class="agent-type-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <svg viewBox="0 0 24 24" fill="white"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 9h-2v2H9v-2H7v-2h2V7h2v2h2v2zm0-6V3.5L18.5 9H13z"/></svg>
+              </div>
+              <h3>Scripted Agent</h3>
+              <p>Rule-based flows built with FlowBuilder for predictable, controlled interactions</p>
+              <div class="agent-type-features">
+                <div class="agent-type-feature">
+                  <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Visual flow designer</span>
+                </div>
+                <div class="agent-type-feature">
+                  <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Deterministic responses</span>
+                </div>
+                <div class="agent-type-feature">
+                  <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Easy to maintain</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Basic Details -->
+        <div class="wizard-panel" id="wizard-step-2">
+          <div class="form-group">
+            <label class="form-label">Agent Name <span class="required">*</span></label>
+            <input type="text" class="form-input" id="new-agent-name" placeholder="e.g., Customer Support Bot" oninput="updateAgentPreview()">
+            <p class="form-hint">Choose a descriptive name that reflects the agent's purpose</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-input" id="new-agent-description" placeholder="Describe what this agent does and who it helps..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Avatar</label>
+            <div class="avatar-selector">
+              <div class="avatar-preview" id="avatar-preview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <span id="avatar-initials">A</span>
+              </div>
+              <div class="avatar-colors">
+                <div class="avatar-color selected" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="selectAvatarColor(this, 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)')"></div>
+                <div class="avatar-color" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);" onclick="selectAvatarColor(this, 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)')"></div>
+                <div class="avatar-color" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);" onclick="selectAvatarColor(this, 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)')"></div>
+                <div class="avatar-color" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);" onclick="selectAvatarColor(this, 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)')"></div>
+                <div class="avatar-color" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);" onclick="selectAvatarColor(this, 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)')"></div>
+                <div class="avatar-color" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);" onclick="selectAvatarColor(this, 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)')"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Configure (AI Agent) -->
+        <div class="wizard-panel" id="wizard-step-3">
+          <div class="form-group">
+            <label class="form-label">System Prompt <span class="required">*</span></label>
+            <textarea class="form-input" id="new-agent-prompt" style="min-height: 120px;" placeholder="You are a helpful customer support agent for Acme Corp. You help customers with product questions, order status, and technical issues. Always be polite and professional..."></textarea>
+            <p class="form-hint">Define your agent's personality, role, and guidelines</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Knowledge Base</label>
+            <p class="form-hint" style="margin-bottom: 12px;">Select knowledge sources for your agent to reference</p>
+            <div class="kb-option selected" onclick="toggleKbOption(this)">
+              <input type="checkbox" checked>
+              <div class="kb-option-info">
+                <div class="kb-option-name">Product Documentation</div>
+                <div class="kb-option-meta">245 articles • Updated 2 days ago</div>
+              </div>
+            </div>
+            <div class="kb-option" onclick="toggleKbOption(this)">
+              <input type="checkbox">
+              <div class="kb-option-info">
+                <div class="kb-option-name">FAQ Database</div>
+                <div class="kb-option-meta">128 entries • Updated 1 week ago</div>
+              </div>
+            </div>
+            <div class="kb-option" onclick="toggleKbOption(this)">
+              <input type="checkbox">
+              <div class="kb-option-info">
+                <div class="kb-option-name">Policy Documents</div>
+                <div class="kb-option-meta">32 documents • Updated 3 days ago</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Language Model</label>
+            <select class="form-input">
+              <option>GPT-4o (Recommended)</option>
+              <option>GPT-4 Turbo</option>
+              <option>Claude 3.5 Sonnet</option>
+              <option>Llama 3.1 70B</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Step 3: Configure (Scripted Agent) -->
+        <div class="wizard-panel" id="wizard-step-3-scripted">
+          <div style="text-align: center; padding: 40px 20px;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 16px; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center;">
+              <svg viewBox="0 0 24 24" width="40" height="40" fill="white"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 9h-2v2H9v-2H7v-2h2V7h2v2h2v2zm0-6V3.5L18.5 9H13z"/></svg>
+            </div>
+            <h3 style="font-size: 18px; margin-bottom: 8px;">Design Your Flow</h3>
+            <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto 24px;">After creating your agent, you'll be taken to FlowBuilder where you can design the conversation flow using our visual editor.</p>
+            
+            <div class="form-group" style="text-align: left; max-width: 400px; margin: 0 auto;">
+              <label class="form-label">Start from a template</label>
+              <select class="form-input">
+                <option>Blank Flow</option>
+                <option>Customer Support Template</option>
+                <option>Lead Qualification Template</option>
+                <option>Appointment Booking Template</option>
+                <option>FAQ Bot Template</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Review -->
+        <div class="wizard-panel" id="wizard-step-4">
+          <div class="summary-section">
+            <div class="summary-section-title">Agent Details</div>
+            <div class="summary-row">
+              <span class="summary-label">Name</span>
+              <span class="summary-value" id="summary-name">—</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Type</span>
+              <span class="summary-value" id="summary-type">AI Agent</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Description</span>
+              <span class="summary-value" id="summary-description" style="max-width: 300px; text-align: right;">—</span>
+            </div>
+          </div>
+
+          <div class="summary-section" id="summary-ai-config">
+            <div class="summary-section-title">Configuration</div>
+            <div class="summary-row">
+              <span class="summary-label">Language Model</span>
+              <span class="summary-value">GPT-4o</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Knowledge Bases</span>
+              <span class="summary-value" id="summary-kb">1 selected</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">System Prompt</span>
+              <span class="summary-value" style="color: var(--success-color);">Configured</span>
+            </div>
+          </div>
+
+          <div class="summary-section" id="summary-scripted-config" style="display: none;">
+            <div class="summary-section-title">Configuration</div>
+            <div class="summary-row">
+              <span class="summary-label">Template</span>
+              <span class="summary-value">Blank Flow</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Next Step</span>
+              <span class="summary-value">Open in FlowBuilder</span>
+            </div>
+          </div>
+
+          <div style="background: var(--warning-bg); border: 1px solid var(--warning-color); border-radius: 12px; padding: 16px; display: flex; gap: 12px; align-items: flex-start;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="#f59e0b" style="flex-shrink: 0; margin-top: 2px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <div>
+              <div style="font-weight: 500; margin-bottom: 4px;">Agent will be created in Development</div>
+              <div style="font-size: 13px; color: var(--text-secondary);">You can test and refine your agent before publishing it to production channels.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="wizard-back-btn" onclick="wizardBack()" style="visibility: hidden;">Back</button>
+        <button class="btn btn-primary" id="wizard-next-btn" onclick="wizardNext()">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+    <span id="toast-message">Changes saved successfully</span>
+  </div>
+
+  <script>
+    // Agent data
+    const agents = {
+      'cs': {
+        id: 'cs',
+        name: 'Customer Support Bot',
+        initials: 'CS',
+        description: 'Handles customer inquiries',
+        gradient: 'linear-gradient(135deg, #667eea, #764ba2)',
+        status: 'Published',
+        statusClass: 'badge-success',
+        sessions: '5,234',
+        successRate: '94.2%',
+        messages: '18,921',
+        avgResponse: '1.2s',
+        meta: 'Handles customer inquiries • Last updated 2 hours ago'
+      },
+      'sa': {
+        id: 'sa',
+        name: 'Sales Assistant',
+        initials: 'SA',
+        description: 'Lead qualification',
+        gradient: 'linear-gradient(135deg, #11998e, #38ef7d)',
+        status: 'Published',
+        statusClass: 'badge-success',
+        sessions: '3,891',
+        successRate: '91.8%',
+        messages: '12,456',
+        avgResponse: '1.4s',
+        meta: 'Lead qualification • Last updated 5 hours ago'
+      },
+      'it': {
+        id: 'it',
+        name: 'IT Support Agent',
+        initials: 'IT',
+        description: 'Technical support',
+        gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)',
+        status: 'Ready to Publish',
+        statusClass: 'badge-warning',
+        sessions: '—',
+        successRate: '—',
+        messages: '—',
+        avgResponse: '—',
+        meta: 'Technical support • Last updated 1 hour ago'
+      }
+    };
+
+    let currentAgent = null;
+    let openAgents = []; // Track open agents in sidebar
+
+    // Navigation
+    function navigateTo(page) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      // Show selected page
+      document.getElementById('page-' + page).classList.add('active');
+      
+      // Update global sidebar items
+      document.querySelectorAll('.nav-item:not(.nested)').forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.page === page) {
+          item.classList.add('active');
+        }
+      });
+
+      // Update agent shortcut active states
+      updateAgentShortcutStates(page);
+
+      // Update tab active states for agent pages
+      if (page.startsWith('agent-')) {
+        updateAgentTabStates(page);
+      }
+    }
+
+    // Update tab active states across all agent pages
+    function updateAgentTabStates(activePage) {
+      // Clear all tab active states on the current page
+      const currentPageEl = document.getElementById('page-' + activePage);
+      if (currentPageEl) {
+        currentPageEl.querySelectorAll('.tabs .tab').forEach(tab => tab.classList.remove('active'));
+        
+        // Set the correct tab as active based on the page
+        const tabs = currentPageEl.querySelectorAll('.tabs .tab');
+        tabs.forEach(tab => {
+          const tabText = tab.textContent.trim().toLowerCase();
+          if (activePage === 'agent-overview' && tabText === 'overview') {
+            tab.classList.add('active');
+          } else if (activePage === 'agent-configure' && tabText === 'configure') {
+            tab.classList.add('active');
+          } else if (activePage === 'agent-monitor' && tabText === 'monitor') {
+            tab.classList.add('active');
+          } else if (activePage === 'agent-changelog' && tabText === 'changelog') {
+            tab.classList.add('active');
+          }
+        });
+      }
+    }
+
+    // Update which agent shortcut is active
+    function updateAgentShortcutStates(page) {
+      document.querySelectorAll('.agent-shortcut').forEach(shortcut => {
+        const agentId = shortcut.dataset.agentId;
+        if (page.startsWith('agent-') && currentAgent && currentAgent.id === agentId) {
+          shortcut.classList.add('active');
+        } else {
+          shortcut.classList.remove('active');
+        }
+      });
+    }
+
+    // Render agent menu
+    function renderAgentMenu() {
+      const container = document.getElementById('agent-menu-container');
+      const divider = document.getElementById('agent-menu-divider');
+      
+      if (openAgents.length === 0) {
+        container.innerHTML = '';
+        divider.style.display = 'none';
+        return;
+      }
+      
+      divider.style.display = 'block';
+      
+      container.innerHTML = openAgents.map(agentId => {
+        const agent = agents[agentId];
+        const isActive = currentAgent && currentAgent.id === agentId;
+        return `
+          <div class="agent-shortcut ${isActive ? 'active' : ''}" data-agent-id="${agent.id}" onclick="goToAgent('${agent.id}')" title="${agent.name}">
+            <div class="agent-shortcut-icon" style="background: ${agent.gradient}">${agent.initials}</div>
+            <span class="agent-shortcut-name">${agent.name}</span>
+            <button class="nav-close-btn" onclick="closeAgentNav(event, '${agent.id}')" title="Remove shortcut">
+              <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Go directly to an agent's overview page
+    function goToAgent(agentId) {
+      const agent = agents[agentId];
+      if (!agent) return;
+      
+      currentAgent = agent;
+      updateAgentPages();
+      renderAgentMenu(); // Update active state
+      navigateTo('agent-overview');
+    }
+
+    // Close agent nav manually (remove shortcut)
+    function closeAgentNav(event, agentId) {
+      event.stopPropagation(); // Prevent toggle from firing
+      
+      // Remove from open agents
+      openAgents = openAgents.filter(id => id !== agentId);
+      renderAgentMenu();
+      
+      // If closing the current agent, navigate away
+      if (currentAgent && currentAgent.id === agentId) {
+        currentAgent = null;
+        const currentPage = document.querySelector('.page.active');
+        if (currentPage && currentPage.id.startsWith('page-agent-')) {
+          navigateTo('agents');
+        }
+      }
+    }
+
+    // Update agent pages with current agent data
+    function updateAgentPages() {
+      if (!currentAgent) return;
+
+      // Update all agent headers
+      document.querySelectorAll('.agent-avatar').forEach(el => {
+        el.textContent = currentAgent.initials;
+        el.style.background = currentAgent.gradient;
+      });
+      document.querySelectorAll('.agent-name').forEach(el => {
+        el.textContent = currentAgent.name;
+      });
+      document.querySelectorAll('.agent-meta').forEach(el => {
+        if (!el.closest('#page-agent-configure') && !el.closest('#page-agent-monitor')) {
+          el.textContent = currentAgent.meta;
+        }
+      });
+
+      // Update status badges in agent pages
+      const overviewBadge = document.querySelector('#page-agent-overview .badge');
+      if (overviewBadge) {
+        overviewBadge.className = 'badge ' + currentAgent.statusClass;
+        overviewBadge.textContent = currentAgent.status;
+      }
+      const monitorBadge = document.querySelector('#page-agent-monitor .badge');
+      if (monitorBadge) {
+        monitorBadge.className = 'badge ' + currentAgent.statusClass;
+        monitorBadge.textContent = currentAgent.status;
+      }
+      
+      // Update changelog page
+      const changelogAvatar = document.querySelector('#page-agent-changelog .agent-avatar');
+      if (changelogAvatar) {
+        changelogAvatar.textContent = currentAgent.initials;
+        changelogAvatar.style.background = currentAgent.gradient;
+      }
+      const changelogName = document.querySelector('#page-agent-changelog .agent-name');
+      if (changelogName) changelogName.textContent = currentAgent.name;
+      const changelogBadge = document.querySelector('#page-agent-changelog .badge');
+      if (changelogBadge) {
+        changelogBadge.className = 'badge ' + currentAgent.statusClass;
+        changelogBadge.textContent = currentAgent.status;
+      }
+
+      // Update stats on monitor page
+      const statValues = document.querySelectorAll('#page-agent-monitor .stat-value');
+      if (statValues.length >= 4) {
+        statValues[0].textContent = currentAgent.sessions;
+        statValues[1].textContent = currentAgent.messages;
+        statValues[2].textContent = currentAgent.successRate;
+        statValues[3].textContent = currentAgent.avgResponse;
+      }
+
+      // Update overview quick stats
+      const overviewStats = document.querySelectorAll('#page-agent-overview .stat-value');
+      if (overviewStats.length >= 2) {
+        overviewStats[0].textContent = currentAgent.sessions;
+        overviewStats[1].textContent = currentAgent.successRate;
+      }
+
+      // Update publish button based on agent status
+      const publishBtn = document.getElementById('publish-btn');
+      if (publishBtn) {
+        if (currentAgent.status === 'Published') {
+          publishBtn.textContent = 'Unpublish';
+          publishBtn.className = 'btn btn-secondary';
+        } else {
+          publishBtn.textContent = 'Publish';
+          publishBtn.className = 'btn btn-primary';
+        }
+      }
+
+      // Show/hide Quick Stats for unpublished agents
+      const quickStats = document.getElementById('overview-quick-stats');
+      if (quickStats) {
+        quickStats.style.display = currentAgent.status === 'Published' ? 'block' : 'none';
+      }
+
+      // Toggle deployment widget based on publish status
+      const deploymentsPublished = document.getElementById('deployments-published');
+      const deploymentsUnpublished = document.getElementById('deployments-unpublished');
+      if (deploymentsPublished && deploymentsUnpublished) {
+        if (currentAgent.status === 'Published') {
+          deploymentsPublished.style.display = 'block';
+          deploymentsUnpublished.style.display = 'none';
+        } else {
+          deploymentsPublished.style.display = 'none';
+          deploymentsUnpublished.style.display = 'block';
+        }
+      }
+    }
+
+    // Select agent from list
+    function selectAgent(agentId) {
+      const agent = agents[agentId];
+      if (!agent) return;
+
+      currentAgent = agent;
+
+      // Add to open agents if not already there
+      if (!openAgents.includes(agentId)) {
+        openAgents.push(agentId);
+      }
+
+      // Render the agent menu
+      renderAgentMenu();
+      
+      // Update agent pages
+      updateAgentPages();
+
+      // Navigate to overview
+      navigateTo('agent-overview');
+    }
+
+    // Config sections
+    function showConfigSection(section) {
+      // Hide all config sections
+      document.querySelectorAll('.config-section').forEach(s => s.style.display = 'none');
+      document.getElementById('config-' + section).style.display = 'block';
+      
+      // Update segment active states
+      document.querySelectorAll('#config-segments .segment-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.textContent.toLowerCase() === section) {
+          item.classList.add('active');
+        }
+      });
+    }
+
+    // Monitor sections
+    function showMonitorSection(section) {
+      // Update segment active states
+      document.querySelectorAll('#monitor-segments .segment-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.textContent.toLowerCase() === section) {
+          item.classList.add('active');
+        }
+      });
+      
+      // Toggle monitor sections
+      document.querySelectorAll('.monitor-section').forEach(s => s.style.display = 'none');
+      document.getElementById('monitor-' + section).style.display = 'block';
+    }
+
+    // Knowledge sections
+    function showKnowledgeSection(section) {
+      // Update segment active states
+      document.querySelectorAll('#knowledge-segments .segment-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.textContent.toLowerCase().includes(section)) {
+          item.classList.add('active');
+        }
+      });
+      
+      // Toggle knowledge sections
+      document.querySelectorAll('.knowledge-section').forEach(s => s.style.display = 'none');
+      document.getElementById('knowledge-' + section).style.display = 'block';
+    }
+
+    // Agent view switcher (list vs card)
+    function switchAgentView(view) {
+      const listView = document.getElementById('agents-list-view');
+      const cardView = document.getElementById('agents-card-view');
+      const buttons = document.querySelectorAll('.view-switcher-btn');
+      
+      // Update button states
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      
+      // Toggle views
+      if (view === 'list') {
+        listView.style.display = 'block';
+        cardView.classList.remove('active');
+      } else {
+        listView.style.display = 'none';
+        cardView.classList.add('active');
+      }
+    }
+
+    // Settings sections
+    function showSettingsSection(section) {
+      document.querySelectorAll('.settings-section').forEach(s => s.style.display = 'none');
+      document.getElementById('settings-' + section).style.display = 'block';
+      
+      // Update tabs
+      const tabs = document.querySelectorAll('#settings-tabs .tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    // ============================================
+    // Create Agent Wizard
+    // ============================================
+    
+    let wizardStep = 1;
+    let newAgentType = 'ai';
+    let newAgentGradient = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+
+    function openCreateAgentModal() {
+      document.getElementById('create-agent-modal').classList.add('show');
+      resetWizard();
+    }
+
+    function closeCreateAgentModal() {
+      document.getElementById('create-agent-modal').classList.remove('show');
+    }
+
+    function resetWizard() {
+      wizardStep = 1;
+      newAgentType = 'ai';
+      newAgentGradient = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+      
+      // Reset form fields
+      document.getElementById('new-agent-name').value = '';
+      document.getElementById('new-agent-description').value = '';
+      document.getElementById('new-agent-prompt').value = '';
+      
+      // Reset avatar
+      document.getElementById('avatar-preview').style.background = newAgentGradient;
+      document.getElementById('avatar-initials').textContent = 'A';
+      
+      // Reset selections
+      document.querySelectorAll('.agent-type-card').forEach(card => card.classList.remove('selected'));
+      document.querySelector('.agent-type-card').classList.add('selected');
+      
+      document.querySelectorAll('.avatar-color').forEach(c => c.classList.remove('selected'));
+      document.querySelector('.avatar-color').classList.add('selected');
+      
+      updateWizardUI();
+    }
+
+    function selectAgentType(type) {
+      newAgentType = type;
+      document.querySelectorAll('.agent-type-card').forEach(card => card.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+    }
+
+    function selectAvatarColor(element, gradient) {
+      newAgentGradient = gradient;
+      document.querySelectorAll('.avatar-color').forEach(c => c.classList.remove('selected'));
+      element.classList.add('selected');
+      document.getElementById('avatar-preview').style.background = gradient;
+    }
+
+    function updateAgentPreview() {
+      const name = document.getElementById('new-agent-name').value;
+      const initials = name ? name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() : 'A';
+      document.getElementById('avatar-initials').textContent = initials;
+    }
+
+    function toggleKbOption(element) {
+      element.classList.toggle('selected');
+      const checkbox = element.querySelector('input[type="checkbox"]');
+      checkbox.checked = element.classList.contains('selected');
+    }
+
+    function updateWizardUI() {
+      // Update step indicators
+      document.querySelectorAll('.wizard-step').forEach((step, index) => {
+        const stepNum = index + 1;
+        step.classList.remove('active', 'completed');
+        if (stepNum === wizardStep) {
+          step.classList.add('active');
+        } else if (stepNum < wizardStep) {
+          step.classList.add('completed');
+        }
+      });
+
+      // Update step lines
+      document.querySelectorAll('.wizard-step-line').forEach((line, index) => {
+        line.classList.toggle('completed', index < wizardStep - 1);
+      });
+
+      // Show correct panel
+      document.querySelectorAll('.wizard-panel').forEach(panel => panel.classList.remove('active'));
+      
+      if (wizardStep === 3) {
+        if (newAgentType === 'ai') {
+          document.getElementById('wizard-step-3').classList.add('active');
+        } else {
+          document.getElementById('wizard-step-3-scripted').classList.add('active');
+        }
+      } else {
+        document.getElementById('wizard-step-' + wizardStep).classList.add('active');
+      }
+
+      // Update buttons
+      const backBtn = document.getElementById('wizard-back-btn');
+      const nextBtn = document.getElementById('wizard-next-btn');
+      
+      backBtn.style.visibility = wizardStep === 1 ? 'hidden' : 'visible';
+      
+      if (wizardStep === 4) {
+        nextBtn.textContent = 'Create Agent';
+      } else {
+        nextBtn.textContent = 'Continue';
+      }
+
+      // Update summary on step 4
+      if (wizardStep === 4) {
+        updateSummary();
+      }
+    }
+
+    function updateSummary() {
+      const name = document.getElementById('new-agent-name').value || '—';
+      const description = document.getElementById('new-agent-description').value || '—';
+      
+      document.getElementById('summary-name').textContent = name;
+      document.getElementById('summary-description').textContent = description;
+      document.getElementById('summary-type').textContent = newAgentType === 'ai' ? 'AI Agent' : 'Scripted Agent';
+      
+      // Show/hide config sections based on type
+      document.getElementById('summary-ai-config').style.display = newAgentType === 'ai' ? 'block' : 'none';
+      document.getElementById('summary-scripted-config').style.display = newAgentType === 'scripted' ? 'block' : 'none';
+      
+      // Count selected knowledge bases
+      const kbCount = document.querySelectorAll('.kb-option.selected').length;
+      document.getElementById('summary-kb').textContent = kbCount + ' selected';
+    }
+
+    function wizardNext() {
+      if (wizardStep === 4) {
+        // Create the agent
+        createNewAgent();
+        return;
+      }
+      
+      // Validation
+      if (wizardStep === 2) {
+        const name = document.getElementById('new-agent-name').value.trim();
+        if (!name) {
+          showToast('Please enter an agent name');
+          return;
+        }
+      }
+      
+      wizardStep++;
+      updateWizardUI();
+    }
+
+    function wizardBack() {
+      if (wizardStep > 1) {
+        wizardStep--;
+        updateWizardUI();
+      }
+    }
+
+    function createNewAgent() {
+      const name = document.getElementById('new-agent-name').value.trim();
+      const description = document.getElementById('new-agent-description').value.trim();
+      const initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+      
+      // Create new agent ID
+      const newId = 'new-' + Date.now();
+      
+      // Add to agents object
+      agents[newId] = {
+        id: newId,
+        name: name,
+        initials: initials,
+        description: description,
+        gradient: newAgentGradient,
+        status: 'In Development',
+        statusClass: 'badge-warning',
+        sessions: '0',
+        successRate: '—',
+        messages: '0',
+        avgResponse: '—',
+        meta: (newAgentType === 'ai' ? 'AI Agent' : 'Scripted Agent') + ' • Just created'
+      };
+      
+      // Close modal
+      closeCreateAgentModal();
+      
+      // Show success message
+      showToast('Agent "' + name + '" created successfully!');
+      
+      // Select and open the new agent
+      selectAgent(newId);
+    }
+
+    // Close modal on overlay click
+    document.getElementById('create-agent-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeCreateAgentModal();
+      }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeCreateAgentModal();
+      }
+    });
+
+    // Toast notification
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-message').textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // Sidebar click handlers
+    document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+      item.addEventListener('click', () => navigateTo(item.dataset.page));
+    });
+
+    // Tab click handlers
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        this.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

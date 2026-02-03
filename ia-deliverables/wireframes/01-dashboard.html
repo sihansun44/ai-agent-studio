@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Webex AI Agent Studio</title>
+  <link rel="stylesheet" href="wireframe-styles.css">
+</head>
+<body>
+  <div class="wireframe-label">WIREFRAME: Dashboard</div>
+  
+  <!-- Header -->
+  <header class="app-header">
+    <div class="app-logo">Webex AI Agent Studio</div>
+    <div class="header-search">
+      <input type="text" placeholder="Search agents, knowledge, connections...">
+    </div>
+    <div class="header-actions">
+      <div class="header-icon">?</div>
+      <div class="header-icon">🔔</div>
+      <div class="header-icon">👤</div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item active" href="01-dashboard.html">Dashboard</a></li>
+          <li><a class="sidebar-nav-item" href="02-agents-list.html">Agents</a></li>
+          <li><a class="sidebar-nav-item" href="06-knowledge-pool.html">Knowledge</a></li>
+          <li><a class="sidebar-nav-item" href="07-connections.html">Connections</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">
+        <ul class="sidebar-nav">
+          <li><a class="sidebar-nav-item" href="#">Organization Settings</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-subtitle">Overview of your AI agents and resources</p>
+        </div>
+        <div class="page-actions">
+          <a href="02-agents-list.html" class="btn btn-primary">+ Create Agent</a>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-4" style="margin-bottom: 24px;">
+        <div class="stat-card">
+          <div class="stat-label">Total Agents</div>
+          <div class="stat-value">12</div>
+          <div class="stat-change positive">↑ 2 this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Published</div>
+          <div class="stat-value">8</div>
+          <div class="stat-change">Active in production</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Sessions (7d)</div>
+          <div class="stat-value">15,432</div>
+          <div class="stat-change positive">↑ 12% vs last week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg Success Rate</div>
+          <div class="stat-value">94.2%</div>
+          <div class="stat-change positive">↑ 2.1%</div>
+        </div>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div class="grid grid-2">
+        <!-- Agents by Status -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Agents by Status</h3>
+            <a href="02-agents-list.html" class="btn btn-secondary">View All</a>
+          </div>
+          <div class="table-container" style="border: none;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Agent</th>
+                  <th>Status</th>
+                  <th>Sessions (7d)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr onclick="window.location='03-agent-overview.html'">
+                  <td><strong>Customer Support Bot</strong></td>
+                  <td><span class="badge badge-success">Published</span></td>
+                  <td>5,234</td>
+                </tr>
+                <tr>
+                  <td><strong>Sales Assistant</strong></td>
+                  <td><span class="badge badge-success">Published</span></td>
+                  <td>3,891</td>
+                </tr>
+                <tr>
+                  <td><strong>HR Helpdesk</strong></td>
+                  <td><span class="badge badge-success">Published</span></td>
+                  <td>2,156</td>
+                </tr>
+                <tr>
+                  <td><strong>IT Support Agent</strong></td>
+                  <td><span class="badge badge-warning">Ready to Publish</span></td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><strong>Onboarding Assistant</strong></td>
+                  <td><span class="badge badge-info">In Development</span></td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Recent Activity</h3>
+          </div>
+          <div style="font-size: 14px;">
+            <div style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+              <div style="font-weight: 500;">IT Support Agent submitted for review</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">by marcus.dev • 2 hours ago</div>
+            </div>
+            <div style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+              <div style="font-weight: 500;">Knowledge sync completed</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">Product Documentation • 3 hours ago</div>
+            </div>
+            <div style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+              <div style="font-weight: 500;">Customer Support Bot config updated</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">by sarah.admin • 5 hours ago</div>
+            </div>
+            <div style="padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+              <div style="font-weight: 500;">New Salesforce connection added</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">by sarah.admin • 1 day ago</div>
+            </div>
+            <div style="padding: 12px 0;">
+              <div style="font-weight: 500;">HR Helpdesk published to production</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">by sarah.admin • 2 days ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resource Status -->
+      <div class="grid grid-2" style="margin-top: 8px;">
+        <!-- Knowledge Sync Status -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Knowledge Sync Status</h3>
+            <a href="06-knowledge-pool.html" class="btn btn-secondary">Manage</a>
+          </div>
+          <div style="font-size: 14px;">
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+              <span>Product Documentation</span>
+              <span style="color: var(--success-color);">✓ Synced 3h ago</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+              <span>FAQ Database</span>
+              <span style="color: var(--success-color);">✓ Synced 6h ago</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+              <span>Support Articles</span>
+              <span style="color: var(--warning-color);">⚠ Sync in progress</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+              <span>Policy Documents</span>
+              <span style="color: var(--success-color);">✓ Synced 1d ago</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Connection Health -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Connection Health</h3>
+            <a href="07-connections.html" class="btn btn-secondary">Manage</a>
+          </div>
+          <div style="font-size: 14px;">
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+              <span>Salesforce</span>
+              <span style="color: var(--success-color);">● Connected</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+              <span>ServiceNow</span>
+              <span style="color: var(--success-color);">● Connected</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+              <span>Zendesk</span>
+              <span style="color: var(--danger-color);">● Auth expired</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+              <span>Jira</span>
+              <span style="color: var(--success-color);">● Connected</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

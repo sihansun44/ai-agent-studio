@@ -1,0 +1,23 @@
+{
+  "name": "webex-ai-agent-studio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@momentum-design/animations": "^0.4.3",
+    "@momentum-design/brand-visuals": "^0.28.0",
+    "@momentum-design/components": "^0.129.51",
+    "@momentum-design/fonts": "^0.2.5",
+    "@momentum-design/icons": "^0.46.0",
+    "@momentum-design/illustrations": "^0.3.0",
+    "@momentum-design/tokens": "^0.9.0",
+    "@momentum-design/utils": "^0.8.2"
+  }
+}
