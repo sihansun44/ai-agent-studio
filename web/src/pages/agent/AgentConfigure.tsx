@@ -129,6 +129,21 @@ export default function AgentConfigure() {
   const [showExamplesModal, setShowExamplesModal] = useState(false);
   const [showCapabilityPicker, setShowCapabilityPicker] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
+  
+  // List expansion state (show all vs show 3)
+  const [capabilitiesListExpanded, setCapabilitiesListExpanded] = useState(false);
+  const [variablesListExpanded, setVariablesListExpanded] = useState(false);
+  const [knowledgeListExpanded, setKnowledgeListExpanded] = useState(false);
+  const LIST_PREVIEW_COUNT = 3;
+
+  // Sample variables/entities data
+  const [variables] = useState([
+    { id: 1, name: 'caller_fname', source: 'CJDS', description: 'Collect the caller\'s first name' },
+    { id: 2, name: 'caller_lname', source: 'CJDS', description: 'Collect the caller\'s last name' },
+    { id: 3, name: 'appt_time', source: 'CJDS', description: 'The time they would like to book their appointment' },
+    { id: 4, name: 'doctor', source: 'CJDS', description: 'The name of the doctor' },
+    { id: 5, name: 'insurance_provider', source: 'CJDS', description: 'The name of the insurance provider' },
+  ]);
 
   // Set initial content only once
   useEffect(() => {
@@ -357,8 +372,55 @@ You are a professional customer support agent for Acme Corporation, dedicated to
 
   // Drag and drop handlers
   const handleDragStart = (e, cap) => {
-    e.dataTransfer.setData('text/plain', JSON.stringify(cap));
+    e.dataTransfer.setData('text/plain', JSON.stringify({ ...cap, itemType: 'capability' }));
     e.dataTransfer.effectAllowed = 'copy';
+  };
+
+  const handleVariableDragStart = (e, variable) => {
+    e.dataTransfer.setData('text/plain', JSON.stringify({ ...variable, itemType: 'variable' }));
+    e.dataTransfer.effectAllowed = 'copy';
+  };
+
+  const insertVariableAtCursor = (variable) => {
+    if (!instructionRef.current) return;
+    
+    const variableText = `{{${variable.name}}}`;
+    
+    // Create variable chip element
+    const chip = document.createElement('span');
+    chip.setAttribute('contenteditable', 'false');
+    chip.style.cssText = `display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.95); border: 1px solid rgba(255, 255, 255, 0.15); font-size: 12px; font-family: 'Monaco', 'Menlo', monospace; margin: 0 2px; vertical-align: middle;`;
+    chip.textContent = variableText;
+    
+    // Try to insert at current cursor position
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      if (instructionRef.current.contains(range.startContainer)) {
+        range.deleteContents();
+        range.insertNode(chip);
+        // Add space after chip
+        const space = document.createTextNode('\u00A0');
+        if (chip.nextSibling) {
+          chip.parentNode.insertBefore(space, chip.nextSibling);
+        } else {
+          chip.parentNode.appendChild(space);
+        }
+        // Move cursor after the space
+        range.setStartAfter(space);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        instructionRef.current.focus();
+        return;
+      }
+    }
+    
+    // Fallback: append at end
+    instructionRef.current.appendChild(document.createTextNode('\u00A0'));
+    instructionRef.current.appendChild(chip);
+    instructionRef.current.appendChild(document.createTextNode('\u00A0'));
+    instructionRef.current.focus();
   };
 
   const handleDragOver = (e) => {
@@ -379,21 +441,31 @@ You are a professional customer support agent for Acme Corporation, dedicated to
     if (!data || !instructionRef.current) return;
     
     try {
-      const cap = JSON.parse(data);
+      const item = JSON.parse(data);
       
-      // Color mapping based on type
-      const colors = {
-        mcp: { bg: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', border: 'rgba(59, 130, 246, 0.3)' },
-        action: { bg: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', border: 'rgba(168, 85, 247, 0.3)' },
-        handoff: { bg: 'rgba(34, 197, 94, 0.2)', color: '#4ade80', border: 'rgba(34, 197, 94, 0.3)' }
-      };
-      const typeColor = colors[cap.type.toLowerCase()] || colors.mcp;
+      let chip;
       
-      // Create chip element with inline styles matching type colors
-      const chip = document.createElement('span');
-      chip.setAttribute('contenteditable', 'false');
-      chip.style.cssText = `display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; background: ${typeColor.bg}; color: ${typeColor.color}; border: 1px solid ${typeColor.border}; font-size: 12px; font-weight: 500; margin: 0 2px; vertical-align: middle;`;
-      chip.textContent = `⚡ ${cap.name}`;
+      if (item.itemType === 'variable') {
+        // Create variable chip
+        const variableText = `{{${item.name}}}`;
+        chip = document.createElement('span');
+        chip.setAttribute('contenteditable', 'false');
+        chip.style.cssText = `display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.95); border: 1px solid rgba(255, 255, 255, 0.15); font-size: 12px; font-family: 'Monaco', 'Menlo', monospace; margin: 0 2px; vertical-align: middle;`;
+        chip.textContent = variableText;
+      } else {
+        // Create capability chip
+        const colors = {
+          mcp: { bg: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa', border: 'rgba(59, 130, 246, 0.3)' },
+          action: { bg: 'rgba(168, 85, 247, 0.2)', color: '#c084fc', border: 'rgba(168, 85, 247, 0.3)' },
+          handoff: { bg: 'rgba(34, 197, 94, 0.2)', color: '#4ade80', border: 'rgba(34, 197, 94, 0.3)' }
+        };
+        const typeColor = colors[item.type?.toLowerCase()] || colors.mcp;
+        
+        chip = document.createElement('span');
+        chip.setAttribute('contenteditable', 'false');
+        chip.style.cssText = `display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; background: ${typeColor.bg}; color: ${typeColor.color}; border: 1px solid ${typeColor.border}; font-size: 12px; font-weight: 500; margin: 0 2px; vertical-align: middle;`;
+        chip.textContent = `⚡ ${item.name}`;
+      }
       
       // Get drop position from mouse coordinates
       let range = null;
@@ -503,27 +575,35 @@ You are a professional customer support agent for Acme Corporation, dedicated to
               {/* Formatting Toolbar */}
               <div className="instruction-toolbar">
                 <div className="toolbar-left">
-                  <button 
-                    className="toolbar-btn" 
-                    title="Bold (Ctrl+B)"
-                    onMouseDown={(e) => { e.preventDefault(); document.execCommand('bold'); }}
-                  >
-                    <strong>B</strong>
-                  </button>
-                  <button 
-                    className="toolbar-btn" 
-                    title="Italic (Ctrl+I)"
-                    onMouseDown={(e) => { e.preventDefault(); document.execCommand('italic'); }}
-                  >
-                    <em>I</em>
-                  </button>
-                  <button 
-                    className="toolbar-btn" 
-                    title="Underline (Ctrl+U)"
-                    onMouseDown={(e) => { e.preventDefault(); document.execCommand('underline'); }}
-                  >
-                    <span style={{ textDecoration: 'underline' }}>U</span>
-                  </button>
+                  <div className="toolbar-group">
+                    <button 
+                      className="toolbar-btn" 
+                      title="Bold (Ctrl+B)"
+                      onMouseDown={(e) => { e.preventDefault(); document.execCommand('bold'); }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+                      </svg>
+                    </button>
+                    <button 
+                      className="toolbar-btn" 
+                      title="Italic (Ctrl+I)"
+                      onMouseDown={(e) => { e.preventDefault(); document.execCommand('italic'); }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/>
+                      </svg>
+                    </button>
+                    <button 
+                      className="toolbar-btn" 
+                      title="Underline (Ctrl+U)"
+                      onMouseDown={(e) => { e.preventDefault(); document.execCommand('underline'); }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"/><line x1="4" y1="21" x2="20" y2="21"/>
+                      </svg>
+                    </button>
+                  </div>
                   <div className="toolbar-divider" />
                   <button 
                     className="toolbar-btn" 
@@ -534,24 +614,40 @@ You are a professional customer support agent for Acme Corporation, dedicated to
                       if (url) document.execCommand('createLink', false, url);
                     }}
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
                     </svg>
                   </button>
                   <div className="toolbar-divider" />
                   <button 
-                    className="toolbar-btn toolbar-btn-text" 
-                    title="Markdown formatting enabled"
+                    className="toolbar-btn" 
+                    title="Markdown"
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6h17.12c.79 0 1.44.63 1.44 1.41v9.18c0 .78-.65 1.41-1.44 1.41zM6.81 15.19v-3.66l1.92 2.35 1.92-2.35v3.66h1.93V8.81h-1.93l-1.92 2.35-1.92-2.35H4.89v6.38h1.92zM19.69 12h-1.92V8.81h-1.92V12h-1.93l2.89 3.28L19.69 12z"/>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <rect x="2" y="4" width="20" height="16" rx="3" ry="3"/>
+                      <path d="M6 16V8l3 4 3-4v8" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M18 12l-2.5 4h-1l-2.5-4" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    <span>Markdown</span>
+                  </button>
+                  <div className="toolbar-divider" />
+                  <button 
+                    className="toolbar-btn toolbar-btn-example" 
+                    title="View example instructions"
+                    onClick={() => setShowExamplesModal(true)}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="7" y1="8" x2="17" y2="8"/>
+                      <line x1="7" y1="12" x2="17" y2="12"/>
+                      <line x1="7" y1="16" x2="12" y2="16"/>
+                    </svg>
+                    Example
                   </button>
                 </div>
                 <div className="toolbar-right">
                   <button 
-                    className="toolbar-btn toolbar-btn-primary"
+                    className="toolbar-btn toolbar-btn-optimize"
                     onClick={handleOptimizeInstruction}
                     disabled={isOptimizing}
                   >
@@ -562,10 +658,11 @@ You are a professional customer support agent for Acme Corporation, dedicated to
                       </>
                     ) : (
                       <>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29a.996.996 0 00-1.41 0L1.29 18.96a.996.996 0 000 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05a.996.996 0 000-1.41l-2.33-2.35zm-1.03 5.49l-2.12-2.12 2.44-2.44 2.12 2.12-2.44 2.44z"/>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M5 2C5 5.5 2 5.5 2 5.5C2 5.5 5 5.5 5 9C5 5.5 8 5.5 8 5.5C8 5.5 5 5.5 5 2Z"/>
+                          <path d="M14 6C14 12 8 12 8 12C8 12 14 12 14 18C14 12 20 12 20 12C20 12 14 12 14 6Z"/>
                         </svg>
-                        Optimize
+                        Optimize instructions
                       </>
                     )}
                   </button>
@@ -720,7 +817,7 @@ You are a professional customer support agent for Acme Corporation, dedicated to
               <span className="configure-label-hint">Drag capabilities to the instruction field</span>
             </label>
             <div className="configure-list">
-              {capabilities.map(cap => (
+              {(capabilitiesListExpanded ? capabilities : capabilities.slice(0, LIST_PREVIEW_COUNT)).map(cap => (
                 <div 
                   key={cap.id} 
                   className={`configure-capability-item ${!cap.enabled ? 'disabled' : ''}`}
@@ -738,15 +835,56 @@ You are a professional customer support agent for Acme Corporation, dedicated to
                   {cap.enabled && <span className="drag-handle">⋮⋮</span>}
                 </div>
               ))}
+              {capabilities.length > LIST_PREVIEW_COUNT && (
+                <button 
+                  className="configure-view-more-btn"
+                  onClick={() => setCapabilitiesListExpanded(!capabilitiesListExpanded)}
+                >
+                  {capabilitiesListExpanded ? 'View less' : `View ${capabilities.length - LIST_PREVIEW_COUNT} more`}
+                </button>
+              )}
               <button className="configure-add-btn">+ Add capability</button>
             </div>
+          </div>
+
+          {/* Variables/Entities */}
+          <div className="configure-section">
+            <label className="configure-label">Variables</label>
+            <div className="configure-list">
+                {(variablesListExpanded ? variables : variables.slice(0, LIST_PREVIEW_COUNT)).map(variable => (
+                  <div 
+                    key={variable.id} 
+                    className="configure-variable-item"
+                    draggable
+                    onDragStart={(e) => handleVariableDragStart(e, variable)}
+                    onClick={() => insertVariableAtCursor(variable)}
+                    title="Click to insert or drag to instruction field"
+                  >
+                    <div className="variable-header">
+                      <code className="variable-tag">{`{{${variable.name}}}`}</code>
+                      <span className="variable-separator">•</span>
+                      <span className="variable-source">{variable.source}</span>
+                    </div>
+                    <p className="variable-description">{variable.description}</p>
+                  </div>
+                ))}
+                {variables.length > LIST_PREVIEW_COUNT && (
+                  <button 
+                    className="configure-view-more-btn"
+                    onClick={() => setVariablesListExpanded(!variablesListExpanded)}
+                  >
+                    {variablesListExpanded ? 'View less' : `View ${variables.length - LIST_PREVIEW_COUNT} more`}
+                  </button>
+                )}
+                <button className="configure-add-btn">+ Add new entity</button>
+              </div>
           </div>
 
           {/* Knowledge */}
           <div className="configure-section">
             <label className="configure-label">Knowledge</label>
             <div className="configure-list">
-              {KNOWLEDGE_BASES.map(kb => (
+              {(knowledgeListExpanded ? KNOWLEDGE_BASES : KNOWLEDGE_BASES.slice(0, LIST_PREVIEW_COUNT)).map(kb => (
                 <div key={kb.id} className="configure-list-item">
                   <label className="configure-checkbox">
                     <input 
@@ -762,6 +900,14 @@ You are a professional customer support agent for Acme Corporation, dedicated to
                   </label>
                 </div>
               ))}
+              {KNOWLEDGE_BASES.length > LIST_PREVIEW_COUNT && (
+                <button 
+                  className="configure-view-more-btn"
+                  onClick={() => setKnowledgeListExpanded(!knowledgeListExpanded)}
+                >
+                  {knowledgeListExpanded ? 'View less' : `View ${KNOWLEDGE_BASES.length - LIST_PREVIEW_COUNT} more`}
+                </button>
+              )}
               <button className="configure-add-btn">+ Connect knowledge base</button>
             </div>
           </div>

@@ -1507,34 +1507,124 @@ body {
   color: var(--text-muted);
 }
 
-/* Badges - Legacy styles for reference; Momentum mdc-badge is now used */
+/* Badges - Momentum Design Style (Exact Figma Colors) */
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 4px 12px;
+  gap: 4px;
+  padding: 2px 8px;
   border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  border: 1px solid var(--outline-color);
-  background: var(--bg-glass);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  background: #3b3b3b;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: var(--text-primary);
 }
 
 .badge-success { 
-  background: var(--success-bg); 
-  color: var(--success-color); 
-  border-color: var(--success-color);
+  background: #0e2b20;
+  border-color: #3cc29a;
+  color: var(--text-primary);
 }
 
 .badge-warning { 
-  background: var(--warning-bg); 
-  color: var(--warning-color); 
-  border-color: var(--warning-color);
+  background: #36220c;
+  border-color: #f2990a;
+  color: var(--text-primary);
+}
+
+.badge-danger,
+.badge-error { 
+  background: #4f0e10;
+  border-color: #fc8b98;
+  color: var(--text-primary);
 }
 
 .badge-info { 
-  background: rgba(100,180,250,0.15); 
-  color: var(--accent-color); 
-  border-color: var(--accent-color);
+  background: #0a274a;
+  border-color: #64b4fa;
+  color: var(--text-primary);
+}
+
+/* Label Chips - Momentum Design Style (Exact Figma Colors) */
+.label-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  border: 1px solid;
+  color: var(--text-primary);
+}
+
+.label-chip-slate { background: #26262b; border-color: #b0b4d9; }
+.label-chip-gray { background: #26262b; border-color: #b0b4d9; }
+.label-chip-cobalt { background: #12283d; border-color: #5ebff7; }
+.label-chip-blue { background: #12283d; border-color: #5ebff7; }
+.label-chip-violet { background: #29223d; border-color: #c7a5fa; }
+.label-chip-purple { background: #3b1840; border-color: #f294f1; }
+.label-chip-pink { background: #3b1e21; border-color: #fc97aa; }
+.label-chip-orange { background: #411b04; border-color: #fd884e; }
+.label-chip-gold { background: #30240d; border-color: #d6b220; }
+.label-chip-yellow { background: #30240d; border-color: #d6b220; }
+.label-chip-lime { background: #1e2b10; border-color: #93c437; }
+.label-chip-mint { background: #102b2a; border-color: #30c9b0; }
+.label-chip-green { background: #102b2a; border-color: #30c9b0; }
+
+/* Alert Chips - Momentum Design Style (Exact Figma Colors) */
+.alert-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  border: 1px solid;
+  color: var(--text-primary);
+}
+
+.alert-chip-default { 
+  background: #3b3b3b; 
+  border-color: rgba(255, 255, 255, 0.5); 
+}
+.alert-chip-default .alert-icon { color: rgba(255, 255, 255, 0.7); }
+
+.alert-chip-error { 
+  background: #4f0e10; 
+  border-color: #fc8b98; 
+}
+.alert-chip-error .alert-icon { color: #fc8b98; }
+
+.alert-chip-warning { 
+  background: #36220c; 
+  border-color: #f2990a; 
+}
+.alert-chip-warning .alert-icon { color: #f2990a; }
+
+.alert-chip-success { 
+  background: #0e2b20; 
+  border-color: #3cc29a; 
+}
+.alert-chip-success .alert-icon { color: #3cc29a; }
+
+.alert-chip-info { 
+  background: #0a274a; 
+  border-color: #64b4fa; 
+}
+.alert-chip-info .alert-icon { color: #64b4fa; }
+
+.alert-icon {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
 }
 
 /* Tables */
@@ -2552,8 +2642,11 @@ button.view-btn.active {
   flex-shrink: 0;
 }
 
-/* Form Elements */
+/* Form Elements - Momentum Design Style (Exact Figma) */
 .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 20px;
 }
 
@@ -2564,47 +2657,255 @@ button.view-btn.active {
 .form-label {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: var(--text-primary);
-  margin-bottom: 8px;
+  line-height: 20px;
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .form-label .required {
-  color: var(--danger-color);
+  color: #fc8b98;
+  font-weight: 500;
 }
 
 .form-input {
   width: 100%;
-  padding: 12px 14px;
-  border: 1px solid var(--outline-color);
+  height: 32px;
+  padding: 5px 6px 5px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 8px;
   font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
   background: transparent;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.95);
   transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-input:hover {
+  border-color: rgba(255, 255, 255, 0.7);
 }
 
 .form-input:focus {
   outline: none;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(100, 180, 250, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 0 0 2px #000000,
+    0 0 0 4px #64b4fa,
+    0 0 0 5px rgba(100, 180, 250, 0.35);
 }
 
 .form-input::placeholder {
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+}
+
+.form-input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Error state */
+.form-input.error,
+.form-input:invalid {
+  border-color: #fc8b98;
+}
+
+.form-input.error:focus,
+.form-input:invalid:focus {
+  box-shadow: 
+    0 0 0 2px #000000,
+    0 0 0 4px #fc8b98,
+    0 0 0 5px rgba(252, 139, 152, 0.35);
+}
+
+/* Success state */
+.form-input.success {
+  border-color: #3cc29a;
+}
+
+.form-input.success:focus {
+  box-shadow: 
+    0 0 0 2px #000000,
+    0 0 0 4px #3cc29a,
+    0 0 0 5px rgba(60, 194, 154, 0.35);
+}
+
+/* Warning state */
+.form-input.warning {
+  border-color: #f2990a;
+}
+
+.form-input.warning:focus {
+  box-shadow: 
+    0 0 0 2px #000000,
+    0 0 0 4px #f2990a,
+    0 0 0 5px rgba(242, 153, 10, 0.35);
 }
 
 textarea.form-input {
-  resize: vertical;
+  height: auto;
   min-height: 120px;
+  padding: 8px 12px;
+  resize: vertical;
+}
+
+select.form-input {
+  padding-right: 32px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='rgba(255,255,255,0.7)' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  cursor: pointer;
 }
 
 .form-hint {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form-hint.error {
+  color: #fc8b98;
+}
+
+.form-hint.success {
+  color: #3cc29a;
+}
+
+/* Character count */
+.form-char-count {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: right;
+}
+
+/* Form helper row */
+.form-helper-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Dropdown Menu - Momentum Design Style (Exact Figma) */
+.dropdown-menu {
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  box-shadow: 
+    0 6px 24px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  padding: 12px 8px;
+  min-width: 180px;
+  position: relative;
+}
+
+/* Gradient glow effect */
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 9px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(100, 58, 189, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(100, 58, 189, 0.2) 100%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dropdown-item.selected {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dropdown-item.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.dropdown-item.destructive {
+  color: #fc8b98;
+}
+
+.dropdown-item.destructive:hover {
+  background: rgba(252, 139, 152, 0.1);
+}
+
+.dropdown-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dropdown-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.dropdown-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdown-shortcut {
   font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-left: 8px;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 8px 0;
+}
+
+.dropdown-section-header {
+  padding: 8px 12px 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.5px;
 }
 
 /* Avatar Selector */
@@ -2735,24 +3036,196 @@ textarea.form-input {
   font-weight: 500;
 }
 
-/* Toast - Legacy styles; Momentum mdc-alertbanner is now used */
+/* Toast - Momentum Design Style (Exact Figma) */
 .toast {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background: var(--text-primary);
-  color: var(--bg-primary);
-  padding: 14px 20px;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 8px;
-  font-size: 14px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+  padding: 16px;
+  width: 400px;
+  max-width: calc(100vw - 48px);
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 16px;
   z-index: 1001;
-  animation: slideIn 0.3s ease;
+  animation: toastSlideIn 0.3s ease;
 }
 
-@keyframes slideIn {
+.toast-content {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.toast-icon.toast-icon-success svg {
+  color: #3cc29a;
+}
+
+.toast-icon.toast-icon-error svg {
+  color: #fc8b98;
+}
+
+.toast-icon.toast-icon-warning svg {
+  color: #f2990a;
+}
+
+.toast-icon.toast-icon-info svg {
+  color: #64b4fa;
+}
+
+.toast-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.toast-header {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toast-message {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.toast-message a {
+  color: #64b4fa;
+  text-decoration: underline;
+}
+
+.toast-close {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+  background: transparent;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.toast-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.toast-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.toast-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.toast-btn {
+  height: 32px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.toast-btn-primary {
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  color: rgba(0, 0, 0, 0.95);
+}
+
+.toast-btn-primary:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.toast-btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.toast-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.toast-btn-tertiary {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.toast-btn-tertiary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Toast Variants */
+.toast-success {
+  border-color: rgba(60, 194, 154, 0.4);
+}
+
+.toast-error {
+  border-color: rgba(252, 139, 152, 0.4);
+}
+
+.toast-warning {
+  border-color: rgba(242, 153, 10, 0.4);
+}
+
+.toast-info {
+  border-color: rgba(100, 180, 250, 0.4);
+}
+
+/* Legacy simple toast (for backward compatibility) */
+.toast-simple {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  width: auto;
+  max-width: 400px;
+}
+
+@keyframes toastSlideIn {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
@@ -2934,35 +3407,75 @@ a:hover {
   gap: 8px;
 }
 
+/* Configure Labels - Momentum Design Style */
 .configure-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: rgba(255, 255, 255, 0.95);
 }
 
+.configure-label .required {
+  color: #fc8b98;
+  font-weight: 500;
+}
+
+/* Configure Inputs - Momentum Design Style (Exact Figma) */
 .configure-input {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--border-color);
+  height: 32px;
+  padding: 5px 6px 5px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 8px;
   font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
   background: transparent;
-  color: var(--text-primary);
-  transition: border-color 0.15s;
+  color: rgba(255, 255, 255, 0.95);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.configure-input:hover {
+  border-color: rgba(255, 255, 255, 0.7);
 }
 
 .configure-input:focus {
   outline: none;
-  border-color: var(--accent-color);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 0 0 2px #000000,
+    0 0 0 4px #64b4fa,
+    0 0 0 5px rgba(100, 180, 250, 0.35);
 }
 
 .configure-input::placeholder {
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.configure-input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.configure-input.error {
+  border-color: #fc8b98;
+}
+
+.configure-input.error:focus {
+  box-shadow: 
+    0 0 0 2px #000000,
+    0 0 0 4px #fc8b98,
+    0 0 0 5px rgba(252, 139, 152, 0.35);
 }
 
 .configure-input-textarea {
-  resize: vertical;
+  height: auto;
   min-height: 80px;
+  padding: 8px 12px;
+  resize: vertical;
 }
 
 .configure-textarea {
@@ -3073,20 +3586,120 @@ a:hover {
   background: rgba(255,255,255,0.05);
 }
 
-/* Select dropdown styling */
+/* View more/less button */
+.configure-view-more-btn {
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.configure-view-more-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Collapsible label */
+.configure-label-collapsible {
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+
+.configure-label-collapsible:hover {
+  color: #fff;
+}
+
+.configure-label-collapsible svg {
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+/* Variables/Entities items */
+.configure-variable-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  border-radius: 6px;
+  margin: 2px 0;
+}
+
+.configure-variable-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.configure-variable-item:active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.configure-variable-item:last-of-type {
+  border-bottom: none;
+}
+
+.configure-variable-item[draggable="true"] {
+  cursor: grab;
+}
+
+.configure-variable-item[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.variable-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.variable-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.variable-separator {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+}
+
+.variable-source {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.variable-description {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Select dropdown styling - Momentum Design Style */
 .configure-input[type="select"],
 select.configure-input {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='rgba(255,255,255,0.7)' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='rgba(255,255,255,0.7)' d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 36px;
+  background-position: right 8px center;
+  padding-right: 32px;
   cursor: pointer;
 }
 
 select.configure-input option {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
+  background: #1a1a1a;
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .configure-advanced-link {
@@ -3264,15 +3877,14 @@ select.configure-input option {
   overflow: hidden;
 }
 
-/* Instruction Toolbar */
+/* Instruction Toolbar - Momentum Design Style (Exact Figma) */
 .instruction-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 12px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-bottom: none;
+  padding: 4px 4px 4px 8px;
+  background: rgba(255, 255, 255, 0.07);
+  border: none;
   border-radius: 8px 8px 0 0;
   gap: 8px;
   position: sticky;
@@ -3281,6 +3893,12 @@ select.configure-input option {
 }
 
 .instruction-toolbar .toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.instruction-toolbar .toolbar-group {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -3292,73 +3910,132 @@ select.configure-input option {
   gap: 8px;
 }
 
+/* Icon buttons - Ghost style (transparent, muted icons) */
 .instruction-toolbar .toolbar-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   background: transparent;
   border: none;
-  border-radius: 6px;
-  color: var(--text-secondary);
-  font-size: 13px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
+.instruction-toolbar .toolbar-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
 .instruction-toolbar .toolbar-btn:hover {
-  background: var(--bg-glass);
-  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .instruction-toolbar .toolbar-btn:active {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
 }
 
-.instruction-toolbar .toolbar-btn-text {
+.instruction-toolbar .toolbar-btn.active {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Example Button - Ghost style with icon and text (Exact Figma) */
+.instruction-toolbar .toolbar-btn-example {
   width: auto;
-  padding: 0 10px;
-  font-size: 12px;
+  height: 24px;
+  padding: 0 8px;
   gap: 6px;
-}
-
-.instruction-toolbar .toolbar-btn-primary {
-  width: auto;
-  padding: 0 12px;
-  height: 28px;
   background: transparent;
   border: none;
-  color: var(--text-primary);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.instruction-toolbar .toolbar-btn-example:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.instruction-toolbar .toolbar-btn-example svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Optimize Instructions Button - Accent text, no border (Exact Figma) */
+.instruction-toolbar .toolbar-btn-optimize {
+  width: auto;
+  height: 24px;
+  padding: 4px 10px;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  border-radius: 100px;
+  color: #64b4fa;
   font-size: 12px;
   font-weight: 500;
-  border-radius: 14px;
+  line-height: 16px;
 }
 
-.instruction-toolbar .toolbar-btn-primary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary);
+.instruction-toolbar .toolbar-btn-optimize:hover {
+  background: rgba(100, 180, 250, 0.1);
 }
 
-.instruction-toolbar .toolbar-btn-primary:disabled {
-  opacity: 0.6;
+.instruction-toolbar .toolbar-btn-optimize:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
+.instruction-toolbar .toolbar-btn-optimize svg {
+  width: 16px;
+  height: 16px;
+  color: #64b4fa;
+}
+
+/* Legacy primary button style - for backwards compatibility */
+.instruction-toolbar .toolbar-btn-primary {
+  width: auto;
+  padding: 4px 10px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  color: #64b4fa;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 100px;
+  gap: 4px;
+}
+
+.instruction-toolbar .toolbar-btn-primary:hover {
+  background: rgba(100, 180, 250, 0.1);
+}
+
+.instruction-toolbar .toolbar-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Vertical divider between button groups */
 .instruction-toolbar .toolbar-divider {
   width: 1px;
-  height: 20px;
-  background: var(--border-color);
-  margin: 0 4px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .instruction-toolbar .toolbar-spinner {
   width: 12px;
   height: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border: 2px solid rgba(100, 180, 250, 0.3);
+  border-top-color: #64b4fa;
   border-radius: 50%;
   animation: toolbar-spin 0.8s linear infinite;
 }
@@ -3369,14 +4046,14 @@ select.configure-input option {
 
 /* Adjust instruction editor when toolbar is present */
 .instruction-editor-container .instruction-editor {
-  border-radius: 0;
+  border-radius: 0 0 8px 8px;
   border: none;
-  border-top: 1px solid var(--border-color);
+  border-top: none;
 }
 
 .instruction-editor-container .instruction-toolbar {
   border: none;
-  border-radius: 0;
+  border-radius: 8px 8px 0 0;
 }
 
 /* Floating Plus Button - Tertiary Style */
@@ -3402,35 +4079,61 @@ select.configure-input option {
   color: var(--text-primary);
 }
 
-/* Plus Menu Dropdown */
+/* Plus Menu Dropdown - Momentum Design Style (Exact Figma) */
 .instruction-plus-menu {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  padding: 4px;
+  box-shadow: 
+    0 6px 24px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  padding: 12px 8px;
   min-width: 220px;
   z-index: 101;
+  position: relative;
+}
+
+/* Gradient glow effect */
+.instruction-plus-menu::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 9px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(100, 58, 189, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(100, 58, 189, 0.2) 100%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .instruction-plus-menu button {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
-  padding: 10px 12px;
+  padding: 8px 12px;
   background: transparent;
   border: none;
-  color: var(--text-primary);
-  font-size: 13px;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
   text-align: left;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
   transition: background 0.15s ease;
 }
 
 .instruction-plus-menu button:hover {
-  background: var(--bg-glass);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .instruction-plus-menu button:disabled {
@@ -3458,25 +4161,48 @@ select.configure-input option {
   to { transform: rotate(360deg); }
 }
 
-/* Capability Picker Dropdown */
+/* Capability Picker Dropdown - Momentum Design Style (Exact Figma) */
 .instruction-capability-picker {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  padding: 4px;
+  box-shadow: 
+    0 6px 24px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  padding: 12px 8px;
   min-width: 260px;
   z-index: 101;
+  position: relative;
+}
+
+/* Gradient glow effect */
+.instruction-capability-picker::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 9px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(100, 58, 189, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(100, 58, 189, 0.2) 100%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .instruction-capability-picker .picker-header {
   padding: 8px 12px;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   text-transform: uppercase;
-  color: var(--text-muted);
-  border-bottom: 1px solid var(--border-color);
-  margin-bottom: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.5px;
 }
 
 .instruction-capability-picker button.picker-item {
@@ -3484,19 +4210,21 @@ select.configure-input option {
   align-items: center;
   gap: 8px;
   width: 100%;
-  padding: 10px 12px;
+  padding: 8px 12px;
   background: transparent;
   border: none;
-  color: var(--text-primary);
-  font-size: 13px;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
   text-align: left;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
   transition: background 0.15s ease;
 }
 
 .instruction-capability-picker button.picker-item:hover {
-  background: var(--bg-glass);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .instruction-capability-picker .picker-icon {
@@ -3508,26 +4236,28 @@ select.configure-input option {
 }
 
 .instruction-capability-picker .picker-type {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 400;
+  padding: 2px 8px;
   border-radius: 4px;
   text-transform: uppercase;
+  border: 1px solid;
+  color: var(--text-primary);
 }
 
 .instruction-capability-picker .picker-type.type-mcp {
-  background: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
+  background: #12283d;
+  border-color: #5ebff7;
 }
 
 .instruction-capability-picker .picker-type.type-action {
-  background: rgba(168, 85, 247, 0.2);
-  color: #c084fc;
+  background: #29223d;
+  border-color: #c7a5fa;
 }
 
 .instruction-capability-picker .picker-type.type-handoff {
-  background: rgba(34, 197, 94, 0.2);
-  color: #4ade80;
+  background: #0e2b20;
+  border-color: #3cc29a;
 }
 
 /* Examples Modal Grid */
@@ -3584,56 +4314,74 @@ select.configure-input option {
   margin-left: 8px;
 }
 
-/* Instruction Chips */
+/* Instruction Chips - Momentum Design Style (Exact Figma Colors) */
 .instruction-chip {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
   font-family: inherit;
   vertical-align: middle;
   margin: 0 2px;
   user-select: none;
+  border: 1px solid;
+  color: var(--text-primary);
 }
 
 .instruction-chip.chip-mcp {
-  background: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: #12283d;
+  border-color: #5ebff7;
+}
+
+.instruction-chip.chip-mcp .chip-icon {
+  color: #5ebff7;
 }
 
 .instruction-chip.chip-action {
-  background: rgba(168, 85, 247, 0.2);
-  color: #c084fc;
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: #29223d;
+  border-color: #c7a5fa;
+}
+
+.instruction-chip.chip-action .chip-icon {
+  color: #c7a5fa;
 }
 
 .instruction-chip.chip-handoff {
-  background: rgba(34, 197, 94, 0.2);
-  color: #4ade80;
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: #0e2b20;
+  border-color: #3cc29a;
+}
+
+.instruction-chip.chip-handoff .chip-icon {
+  color: #3cc29a;
 }
 
 .chip-icon {
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .chip-remove {
   background: none;
   border: none;
-  color: inherit;
+  color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1;
-  padding: 0 2px;
+  padding: 0;
   margin-left: 2px;
-  opacity: 0.6;
-  transition: opacity 0.15s;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.15s;
 }
 
 .chip-remove:hover {
-  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
 }

@@ -168,7 +168,12 @@ export default function CreateAgentModal({ onClose }) {
                 placeholder="e.g., Customer Support Bot"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                maxLength={50}
               />
+              <div className="form-helper-row">
+                <span className="form-hint">Choose a descriptive name for your agent</span>
+                <span className="form-hint">{name.length}/50</span>
+              </div>
             </div>
 
             <div className="form-group">
@@ -178,7 +183,13 @@ export default function CreateAgentModal({ onClose }) {
                 placeholder="Briefly describe what this agent does..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                maxLength={200}
+                rows={3}
               />
+              <div className="form-helper-row">
+                <span className="form-hint">Help users understand the agent's purpose</span>
+                <span className="form-hint">{description.length}/200</span>
+              </div>
             </div>
 
             <div className="form-group">
